@@ -3,17 +3,11 @@ import { signIn, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import Logo from "../landing-page/logo"
 import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { redirect, useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 
 export function Authenticated({ session }: { session: any }) {
-    return (
-        <>
-            Signed in as {session.user.email} <br />
-            <button onClick={() => signOut()}>Sign out</button>
-        </>
-    )
-    // return redirect('/dashboard')
+    return redirect('/dashboard')
 }
 
 export function UnAuthenticated() {
