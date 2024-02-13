@@ -3,7 +3,7 @@ import HeroSection from "./components/landing-page/hero"
 
 export default function Component() {
   return (
-    <>
+    <div className="container">
       <main className="flex-1">
         <HeroSection />
       </main>
@@ -18,7 +18,7 @@ export default function Component() {
           </Link>
         </nav>
       </footer>
-    </>
+    </div>
   )
 }
 

@@ -1,11 +1,11 @@
-import { getSession } from "@/lib/actions"
+import { getData } from "@/lib/actions";
+import WorkspacesTable from "../components/dashboard/workspaces-table";
 
 export default async function Page() {
-    const session = await getSession()
-    
+    const data = await getData()
     return (
-        <div>
-
+        <div className="lg:container">
+            <WorkspacesTable data={data}/>
         </div>
     )
 }
