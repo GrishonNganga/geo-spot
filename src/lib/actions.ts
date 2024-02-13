@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { validateCreatePhotoSpace } from "./validations"
 import { findUser, getUser } from "./database/users"
+import dbConnect from "./database/mongodb"
+import { createPhotoSpace } from "./database/photospace"
 
 export async function getSession() {
     const session = await getServerSession(authOptions)
@@ -57,10 +59,25 @@ export async function createPhotoSpaceAction(data: IPhotoSpace) {
     }
     const session = await getSession()
     if (!session) {
-        return { status: false, message: "Can't create Phot Space without logged in user" }
+        return { status: false, message: "Can't create Photo Space without logged in user" }
     }
-    const user = findUser({ email: session?.user.email })
+    const connect = await dbConnect()
+    if (!connect) {
+        return { status: false, message: "Something wrong happened!" }
+    }
+    const user = await findUser({ email: session?.user.email })
+    if (!user) {
+        return { status: false, message: "Can't create Photo Space without a Geospot account" }
+    }
     const spaceId = uuidv4()
-    // const photoSpace = await createPhotoSpace()
-    // return redirect("/dashboard")
+    try {
+        const photoSpace = await createPhotoSpace({ ...data, spaceId, ownerId: user._id })
+        if (photoSpace) {
+            return { status: true, message: "Photo Space created successfully", data: JSON.parse(JSON.stringify(photoSpace)) }
+        }
+    } catch (e) {
+        return { status: false, message: e.message }
+
+    }
+    return redirect("/dashboard")
 }

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import Upload from './Upload';
 
 const photoSpaceSchema = new mongoose.Schema({
@@ -6,7 +6,7 @@ const photoSpaceSchema = new mongoose.Schema({
     name: { type: String, required: true },
     invitations: [{ type: String }],
     access: { type: Boolean, required: true, default: false },
-    photos: [Upload],
+    photos: [Upload.schema],
     ownerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

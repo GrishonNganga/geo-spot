@@ -11,12 +11,16 @@ import Link from "next/link"
 import { createPhotoSpaceAction } from "@/lib/actions"
 import { validateCreatePhotoSpace } from "@/lib/validations"
 import { toast } from "sonner"
+import { redirect, useRouter } from "next/navigation"
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Page() {
     const [photoSpaceDetails, setPhotoSpaceDetails] = useState({
         name: "",
         access: false,
     })
+    const router = useRouter()
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log("p", photoSpaceDetails)
@@ -29,10 +33,18 @@ export default function Page() {
             return
         }
         const response = await createPhotoSpaceAction(photoSpaceDetails)
-        if(!response.status){
+        if (!response.status) {
             toast.error("Error creating Photospace", {
                 description: response.message,
             })
+        }
+        if (response.status) {
+            toast.success("Photo Space created successfully", {
+                description: response.message,
+            })
+            setTimeout(() => {
+                router.push(`/dashboard/${response.data.spaceId}`)
+            }, 2500)
         }
     }
 
