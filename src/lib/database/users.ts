@@ -12,6 +12,15 @@ export const findUser = async (data: any) => {
     return await user;
 }
 
+export const findUsersByEmail = async (data: String[]) => {
+    const users = User.find({
+        'email': {
+            $in: data
+        }
+    })
+    return await users;
+}
+
 export const getUser = async (_id: ObjectId) => {
     const user = User.findOne({ _id })
     return await user;

@@ -3,12 +3,15 @@ import Image from "next/image";
 import Nav from "./nav";
 import Link from "next/link";
 import { getSession } from "@/lib/actions";
+import Logo from "./logo";
 
 export default async function Hero() {
     const session = await getSession()
     return (
         <>
-            <Nav />
+            <Nav>
+                <Logo />
+            </Nav>
             <section className="w-full pt-32 lg:pt-0 h-screen">
                 <div className="container w-full lg:h-full flex flex-col items-center lg:justify-center gap-y-10 lg:gap-y-20">
                     <div className="space-y-3">

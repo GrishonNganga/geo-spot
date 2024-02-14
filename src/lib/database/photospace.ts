@@ -9,7 +9,7 @@ export const createPhotoSpace = async (data: IPhotoSpace) => {
 }
 
 export const findPhotoSpace = async (data: any) => {
-    const photoSpace = PhotoSpace.findOne(data)
+    const photoSpace = PhotoSpace.findOne(data).populate('ownerId')
     return await photoSpace;
 }
 

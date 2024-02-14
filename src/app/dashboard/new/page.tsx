@@ -43,7 +43,7 @@ export default function Page() {
                 description: response.message,
             })
             setTimeout(() => {
-                router.push(`/dashboard/${response.data.spaceId}`)
+                router.push(`/space/${response.data.spaceId}`)
             }, 2500)
         }
     }

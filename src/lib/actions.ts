@@ -6,13 +6,20 @@ import { redirect } from "next/navigation"
 import { v4 as uuidv4 } from 'uuid';
 
 import { validateCreatePhotoSpace } from "./validations"
-import { findUser, getUser } from "./database/users"
+import { findUser, findUsersByEmail } from "./database/users"
 import dbConnect from "./database/mongodb"
 import { createPhotoSpace } from "./database/photospace"
 
 export async function getSession() {
     const session = await getServerSession(authOptions)
     return session
+}
+
+export async function getLoggedInUser() {
+    const session = await getSession()
+    await dbConnect()
+    const user = await findUser({ email: session?.user?.email })
+    return user
 }
 
 const data: Payment[] = [
@@ -80,4 +87,8 @@ export async function createPhotoSpaceAction(data: IPhotoSpace) {
 
     }
     return redirect("/dashboard")
+}
+
+export async function getPopulatedInvitations(emails: String[]) {
+    return await findUsersByEmail(emails)
 }
