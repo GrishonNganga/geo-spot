@@ -13,6 +13,11 @@ export const findPhotoSpace = async (data: any) => {
     return await photoSpace;
 }
 
+export const findPhotoSpaces = async (data: any) => {
+    const photoSpace = PhotoSpace.find(data).populate('ownerId')
+    return await photoSpace;
+}
+
 export const getPhotoSpace = async (_id: ObjectId) => {
     const photoSpace = PhotoSpace.findOne({ _id })
     return await photoSpace;

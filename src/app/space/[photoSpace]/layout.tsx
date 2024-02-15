@@ -12,6 +12,9 @@ export default async function Layout({ params, children }: { children: React.Rea
     const session = await getSession()
     const loggedInUser = await getLoggedInUser()
     const photoSpace = JSON.parse(JSON.stringify(await getPhotoSpaceBySpaceId(photoSpaceId)))
+    if (!photoSpace) {
+        return redirect('/404')
+    }
     const isOwner = (userId: String) => {
         if (photoSpace.ownerId._id.toString() !== userId) {
             return false

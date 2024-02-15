@@ -1,11 +1,11 @@
-import { getData } from "@/lib/actions";
-import WorkspacesTable from "../components/dashboard/workspaces-table";
+import { getLoggedInUser } from "@/lib/actions";
+import PhotoSpacesTable from "../components/dashboard/photospaces-table";
+
 
 export default async function Page() {
-    const data = await getData()
     return (
         <div className="lg:container">
-            <WorkspacesTable data={data}/>
+            <PhotoSpacesTable />
         </div>
     )
 }

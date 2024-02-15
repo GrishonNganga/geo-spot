@@ -25,9 +25,11 @@ import {
 } from "@/components/ui/table"
 import Link from "next/link"
 import { columns } from "@/app/components/dashboard/workspace-columns"
-import { Payment } from "@/lib/types"
+import { getData, getLoggedInUser } from "@/lib/actions"
+import { IPhotoSpace } from "@/lib/types"
 
-export default function WorkspacesTable({ data }: { data: Payment[] }) {
+export default function PhotoSpacesTable() {
+    const [data, setData] = React.useState<IPhotoSpace[]>([])
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -36,8 +38,15 @@ export default function WorkspacesTable({ data }: { data: Payment[] }) {
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
+    React.useEffect(() => {
+        pullData()
+    }, [])
 
-
+    const pullData = async () => {
+        const user = await getLoggedInUser()
+        const data = await getData(user._id)
+        setData(data)
+    }
     const table = useReactTable({
         data,
         columns,
@@ -71,7 +80,7 @@ export default function WorkspacesTable({ data }: { data: Payment[] }) {
                 <div className="flex gap-x-2">
                     <Button>
                         <Link href="/dashboard/new">
-                            New Workspace
+                            New Photospace
                         </Link>
                     </Button>
                 </div>

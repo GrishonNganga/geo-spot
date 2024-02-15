@@ -1,14 +1,15 @@
 'use server'
 import { authOptions } from "@/pages/api/auth/[...nextauth].js"
 import { getServerSession } from "next-auth/next"
-import { Payment, IPhotoSpace } from "@/lib/types"
+import { IPhotoSpace } from "@/lib/types"
 import { redirect } from "next/navigation"
 import { v4 as uuidv4 } from 'uuid';
 
 import { validateCreatePhotoSpace } from "./validations"
 import { findUser, findUsersByEmail } from "./database/users"
 import dbConnect from "./database/mongodb"
-import { createPhotoSpace } from "./database/photospace"
+import { createPhotoSpace, findPhotoSpaces } from "./database/photospace"
+import { ObjectId } from "mongoose"
 
 export async function getSession() {
     const session = await getServerSession(authOptions)
@@ -22,41 +23,9 @@ export async function getLoggedInUser() {
     return user
 }
 
-const data: Payment[] = [
-    {
-        id: "m5gr84i9",
-        amount: 316,
-        status: "success",
-        email: "ken99@yahoo.com",
-    },
-    {
-        id: "3u1reuv4",
-        amount: 242,
-        status: "success",
-        email: "Abe45@gmail.com",
-    },
-    {
-        id: "derv1ws0",
-        amount: 837,
-        status: "processing",
-        email: "Monserrat44@gmail.com",
-    },
-    {
-        id: "5kma53ae",
-        amount: 874,
-        status: "success",
-        email: "Silas22@gmail.com",
-    },
-    {
-        id: "bhqecj4p",
-        amount: 721,
-        status: "failed",
-        email: "carmella@hotmail.com",
-    },
-]
-
-export async function getData() {
-    return data
+export async function getData(userId: ObjectId) {
+    const photoSpaces = await findPhotoSpaces({ ownerId: userId })
+    return JSON.parse(JSON.stringify(photoSpaces))
 }
 
 export async function createPhotoSpaceAction(data: IPhotoSpace) {
