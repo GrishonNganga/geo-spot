@@ -4,10 +4,9 @@ import { getLoggedInUser, getSession } from "@/lib/actions"
 import { redirect } from "next/navigation"
 import Nav from "@/app/components/landing-page/nav"
 import UserDropDown from "@/app/components/dashboard/user-dropdown"
-import { MenuIcon } from "lucide-react"
-import NavMenu from "@/app/components/landing-page/nav-menu"
+import NavMenu from "@/app/components/photoSpace/nav-menu"
 
-export default async function Layout({ params, children }: { children: React.ReactNode, params: { photoSpace: string } }) {
+export default async function Layout({ params }: { params: { photoSpace: string } }) {
     const photoSpaceId = params?.photoSpace
     const session = await getSession()
     const loggedInUser = await getLoggedInUser()
@@ -22,10 +21,13 @@ export default async function Layout({ params, children }: { children: React.Rea
         return true
     }
     const hasAccess = (userId: String) => {
-        return false
+        if (!photoSpace.access) {
+            return true
+        }
+        return photoSpace.invitations.includes(loggedInUser.email)
     }
 
-    if (!isOwner(loggedInUser._id.toString()) || hasAccess(loggedInUser._id.toString())) {
+    if (!hasAccess(loggedInUser._id.toString()) && !isOwner(loggedInUser._id.toString())) {
         // TODO: Work on hasAccess() check once that feature is done.
         return redirect('/403')
     }

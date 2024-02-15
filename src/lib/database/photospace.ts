@@ -1,6 +1,5 @@
 import { ObjectId } from "mongoose";
 import { IPhotoSpace } from "../types";
-import User from "@/models/User"
 import PhotoSpace from "@/models/PhotoSpace";
 
 export const createPhotoSpace = async (data: IPhotoSpace) => {
@@ -24,11 +23,17 @@ export const getPhotoSpace = async (_id: ObjectId) => {
 }
 
 export const updatePhotoSpace = async (_id: ObjectId, data: any) => {
-    const photoSpace = await User.findOneAndUpdate({
+    let updateObject = {};
+    for (const key of Object.keys(data)) {
+        if (Array.isArray(data[key])) {
+            updateObject.$addToSet = { [key]: data[key] };
+        } else {
+            updateObject.$set = { key: data[key] };
+        }
+    }
+    const photoSpace = await PhotoSpace.findOneAndUpdate({
         _id
-    }, {
-        $set: data,
-    },
-        { upsert: false })
+    }, updateObject,
+        { upsert: false, new: true })
     return await photoSpace;
 }

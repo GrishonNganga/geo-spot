@@ -24,7 +24,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import Link from "next/link"
-import { columns } from "@/app/components/dashboard/workspace-columns"
+import { columns } from "@/app/components/dashboard/photospace-columns"
 import { getData, getLoggedInUser } from "@/lib/actions"
 import { IPhotoSpace } from "@/lib/types"
 

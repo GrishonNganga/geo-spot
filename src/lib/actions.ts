@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { validateCreatePhotoSpace } from "./validations"
 import { findUser, findUsersByEmail } from "./database/users"
 import dbConnect from "./database/mongodb"
-import { createPhotoSpace, findPhotoSpaces } from "./database/photospace"
+import { createPhotoSpace, findPhotoSpaces, updatePhotoSpace } from "./database/photospace"
 import { ObjectId } from "mongoose"
 
 export async function getSession() {
@@ -18,8 +18,10 @@ export async function getSession() {
 
 export async function getLoggedInUser() {
     const session = await getSession()
+    console.log("SESSS", session)
     await dbConnect()
     const user = await findUser({ email: session?.user?.email })
+    console.log("USWERR", user)
     return user
 }
 
@@ -59,5 +61,12 @@ export async function createPhotoSpaceAction(data: IPhotoSpace) {
 }
 
 export async function getPopulatedInvitations(emails: String[]) {
-    return await findUsersByEmail(emails)
+    const emailsExist = await findUsersByEmail(emails)
+    const emailsNotExist: { email: String }[] = emails.filter(email => !emailsExist.find(e => e.email === email)).map(e => ({ email: e }))
+    return [...emailsExist, ...emailsNotExist]
+}
+
+export async function updatePhotoSpaceAction(id: ObjectId, data: any) {
+    const updated = await updatePhotoSpace(id, data)
+    return JSON.parse(JSON.stringify((updated)))
 }

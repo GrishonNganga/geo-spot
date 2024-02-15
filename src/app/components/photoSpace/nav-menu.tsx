@@ -11,16 +11,18 @@ import {
 
 } from "@/components/ui/sheet"
 import { IPhotoSpace, IUser } from "@/lib/types";
-import UploadCard from "../photoSpace/uploads";
+import UploadCard from "./uploads";
 import { Separator } from "@/components/ui/separator";
 import { getPopulatedInvitations } from "@/lib/actions";
-import ContributorCard from "../photoSpace/contributor";
+import ContributorCard from "./contributor";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import InvitationModal from "./invitation-modal";
 
 export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
+    const [sendInvitationModalOpen, setSendInvitationModalOpen] = useState(false)
     useEffect(() => {
         pullUsers()
     }, [])
@@ -89,13 +91,13 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                                     <div className="w-full flex flex-col items-center gap-y-5">
                                         <div className="">No contributors invited</div>
                                         <div>
-                                            <Button variant={"outline"}>
+                                            <Button variant={"outline"} onClick={() => { setSendInvitationModalOpen(true) }}>
                                                 Invite
                                             </Button>
                                         </div>
                                     </div>
                                     ||
-                                    <Button size={"sm"} variant={"ghost"}>
+                                    <Button size={"sm"} variant={"ghost"} onClick={() => { setSendInvitationModalOpen(true) }}>
                                         <PlusIcon className="w-5 h-5" />
                                     </Button>
                                 }
@@ -108,7 +110,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                     <MenuIcon />
                 </div>
             }
-
+            <InvitationModal open={sendInvitationModalOpen} setOpen={() => { setSendInvitationModalOpen(!sendInvitationModalOpen) }} photoSpace={photoSpace} setInvitations={(inv: String[]) => { setInvitations(inv) }} />
         </div>
     )
 }
