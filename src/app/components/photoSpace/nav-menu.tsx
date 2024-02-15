@@ -1,5 +1,5 @@
 'use client'
-import { MenuIcon, MoveLeftIcon, PlusIcon } from "lucide-react";
+import { ArrowLeft, MenuIcon, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import {
@@ -44,10 +44,10 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                     </SheetClose>
                     <SheetContent onInteractOutside={() => { setSidebarOpen(prevState => !prevState) }} side={"left"}>
                         <SheetHeader>
-                            <div className="flex items-center justify-between px-4 pb-2 gap-x-3 -mt-2">
-                                <div>
+                            <div className="flex items-center justify-between px-4 pb-2 gap-x-3 -mt-4">
+                                <div className=" p-1 hover:bg-gray-100 rounded-full">
                                     <Link href="/dashboard">
-                                        <MoveLeftIcon />
+                                        <ArrowLeft />
                                     </Link>
                                 </div>
                                 <div>
