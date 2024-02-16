@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { CardTitle } from "@/components/ui/card"
 import Image from "next/image"
 
-export default function UploadCard({ name, photos }: { name: String, photos?: String[] }) {
+export default function UploadCard({ name, photos, addPhotosHandler }: { name: String, photos?: String[], addPhotosHandler: () => void }) {
     return (
         <div className="w-full shadow rounded-md border p-3">
             <CardTitle className="text-base border-b pb-2">{name}</CardTitle>
@@ -19,7 +19,7 @@ export default function UploadCard({ name, photos }: { name: String, photos?: St
                     <div className="w-full flex flex-col items-center gap-y-5">
                         <div className="">No photos added</div>
                         <div>
-                            <Button variant={"outline"}>
+                            <Button variant={"outline"} onClick={addPhotosHandler}>
                                 Add photos
                             </Button>
                         </div>

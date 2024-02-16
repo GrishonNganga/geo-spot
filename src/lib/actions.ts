@@ -10,6 +10,8 @@ import { findUser, findUsersByEmail } from "./database/users"
 import dbConnect from "./database/mongodb"
 import { createPhotoSpace, findPhotoSpaces, updatePhotoSpace } from "./database/photospace"
 import { ObjectId } from "mongoose"
+import { storage } from "./firebase"
+import { ref, uploadBytesResumable } from "firebase/storage"
 
 export async function getSession() {
     const session = await getServerSession(authOptions)
@@ -18,10 +20,8 @@ export async function getSession() {
 
 export async function getLoggedInUser() {
     const session = await getSession()
-    console.log("SESSS", session)
     await dbConnect()
     const user = await findUser({ email: session?.user?.email })
-    console.log("USWERR", user)
     return user
 }
 
@@ -69,4 +69,10 @@ export async function getPopulatedInvitations(emails: String[]) {
 export async function updatePhotoSpaceAction(id: ObjectId, data: any) {
     const updated = await updatePhotoSpace(id, data)
     return JSON.parse(JSON.stringify((updated)))
+}
+
+export const uploadFileAction = (file: any) => {
+    const storageRef = ref(storage, `/files/images/${file.name}_${new Date().getTime()}`)
+    const uploadTask = uploadBytesResumable(storageRef, file)
+    return uploadTask
 }

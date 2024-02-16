@@ -18,11 +18,14 @@ import ContributorCard from "./contributor";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InvitationModal from "./invitation-modal";
+import AddPhotosModal from "./photos-modal";
 
 export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
     const [sendInvitationModalOpen, setSendInvitationModalOpen] = useState(false)
+    const [addPhotosModalOpen, setAddPhotosModalOpen] = useState(false)
+
     useEffect(() => {
         pullUsers()
     }, [])
@@ -63,7 +66,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                             <SheetDescription>
                                 Uploads
                             </SheetDescription>
-                            <UploadCard name={`${photoSpace?.ownerId?.name} (owner)`} photos={[]} />
+                            <UploadCard name={`${photoSpace?.ownerId?.name} (owner)`} photos={[]} addPhotosHandler={() => setAddPhotosModalOpen(!addPhotosModalOpen)} />
                             <Separator />
                             <SheetDescription>
                                 Contributors
@@ -111,6 +114,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                 </div>
             }
             <InvitationModal open={sendInvitationModalOpen} setOpen={() => { setSendInvitationModalOpen(!sendInvitationModalOpen) }} photoSpace={photoSpace} setInvitations={(inv: String[]) => { setInvitations(inv) }} />
+            <AddPhotosModal open={addPhotosModalOpen} setOpen={() => { setAddPhotosModalOpen(!addPhotosModalOpen) }} />
         </div>
     )
 }

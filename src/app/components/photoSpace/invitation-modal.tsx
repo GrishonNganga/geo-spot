@@ -92,7 +92,7 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
     }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="">
                 <DialogHeader>
                     <DialogTitle>Invite Collaborators</DialogTitle>
                     <DialogDescription>
