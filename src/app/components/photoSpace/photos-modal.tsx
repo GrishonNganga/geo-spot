@@ -11,12 +11,14 @@ import {
 import { FileIcon, TrashIcon, XIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import exifr from 'exifr'
-import { uploadFileAction } from "@/lib/actions"
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 import { Autocomplete, useJsApiLoader } from "@react-google-maps/api"
+import { toast } from "sonner"
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
+import { storage } from "@/lib/firebase"
 
 const libraries = ['places'];
 
@@ -57,29 +59,13 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
             reader.readAsDataURL(file);
 
             reader.onload = (e) => {
-                file.preview = e.target.result;
+                if (!e) { return }
+                file.preview;
                 console.log("Output", output)
                 file.metadata = output
-                // const uploadTask = uploadFileAction(f);
-                // uploadTask.on(
-                //     "state_changed",
-                //     (snapshot) => {
-                //         const prog = Math.round(
-                //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                //         );
-                //         setUploadProgress(prog);
-                //     },
-                //     (err) => { },
-                //     () => {
-                //         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                //             setThumbnailName(files[0].name);
-                //             setSongObject((prevState) => ({ ...prevState, thumbnail: url }));
-                //             setIsUploadingThumbnail(false);
-                //         });
-                //     }
-                // );
+
                 setUploads((prevState: any) => {
-                    prevState[index] = { ...prevState[index], ...file }
+                    prevState[index] = { ...prevState[index], 'preview': e.target.result, ...file }
                     return [...prevState]
                 })
             }
@@ -91,11 +77,11 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
     const onPlaceChanged = (id: number) => {
         console.log("IDDDD", id)
         console.log("AA", locationAutoComplete)
-        if (locationAutoComplete && locationAutoComplete.getPlace()) {
-            console.log("E", locationAutoComplete.getPlace())
-            const latitude = locationAutoComplete?.getPlace()?.geometry?.location?.lat()
-            const longitude = locationAutoComplete?.getPlace()?.geometry?.location?.lng()
-            const locationName = locationAutoComplete?.getPlace().formatted_address
+        if (locationAutoComplete && locationAutoComplete[id] && locationAutoComplete[id].getPlace()) {
+            console.log("E", locationAutoComplete[id].getPlace())
+            const latitude = locationAutoComplete[id]?.getPlace()?.geometry?.location?.lat()
+            const longitude = locationAutoComplete[id]?.getPlace()?.geometry?.location?.lng()
+            const locationName = locationAutoComplete[id]?.getPlace().formatted_address
             setUploads((prevState: any) => {
                 prevState[id].metadata = {
                     ...(prevState[id]?.metadata ? prevState[id]?.metadata : {}),
@@ -103,16 +89,61 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
                     latitude,
                     longitude
                 }
-
-                console.log("OLV", prevState[id])
                 return [...prevState]
             })
         }
     }
 
-    const onLoad = (autocomplete) => {
-        setLocationAutoComplete(autocomplete)
+    const onLoad = (autocomplete: any, idx: number) => {
+        setLocationAutoComplete((prevState: any) => ({ ...(prevState ? prevState : {}), [idx]: autocomplete }))
     }
+
+
+    const uploadFileToFirebase = (file: any) => {
+        const storageRef = ref(storage, `/files/images/${file.name}_${new Date().getTime()}`)
+        const resp = uploadBytesResumable(storageRef, file)
+        console.log("RES", resp)
+        return resp
+    }
+    const handleSubmit = async () => {
+        let failed
+        for (const photo of uploads) {
+            if (!photo?.metadata?.longitude || !photo?.metadata?.latitude) {
+                toast.error("Ensure all photos have location set")
+                failed = true
+                break;
+            }
+        }
+        if (failed) { return }
+        for (const [index, photo] of uploads.entries()) {
+            const uploadTask = uploadFileToFirebase(photo);
+            console.log("T", uploadTask)
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    console.log("SS", snapshot.totalBytes)
+                    const prog = snapshot.totalBytes === 0 ? 0 : Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    console.log("PR", prog)
+                    setUploads((prevState: any) => {
+                        prevState[index] = { ...prevState[index], uploadStatus: true, uploadProgress: prog }
+                        return [...prevState]
+                    })
+                },
+                (err) => { },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        setUploads((prevState: any) => {
+                            prevState[index] = { ...prevState[index], uploadStatus: false, url: url }
+                            return [...prevState]
+                        })
+                    });
+                }
+            );
+        }
+    }
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-5xl max-h-screen overflow-y-scroll">
@@ -171,14 +202,14 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
                                                             </Label>
                                                             <Autocomplete
                                                                 onPlaceChanged={() => { onPlaceChanged(idx) }}
-                                                                onLoad={onLoad}
+                                                                onLoad={(e) => { onLoad(e, idx) }}
                                                                 className="z-100"
                                                             >
                                                                 <Input name={`newCoordinate-${idx}`} placeholder="Search for location" />
                                                             </Autocomplete>
                                                         </div>
                                                     }
-                                                    <Input name="oldCoordinates" disabled value={`${upload?.metadata?.longitude || 0},${upload?.metadata?.latitude || 0}`} />
+                                                    <Input name={`oldCoordinate-${idx}`} disabled value={`${upload?.metadata?.longitude || 0},${upload?.metadata?.latitude || 0}`} />
                                                 </div>
                                                 <Button variant={"ghost"} className="ml-auto" size="icon">
                                                     <TrashIcon className="w-4 h-4 text-red-400" />
@@ -193,7 +224,7 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
                     }
                 </div>
                 <DialogFooter>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" onClick={handleSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

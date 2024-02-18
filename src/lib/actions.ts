@@ -70,9 +70,3 @@ export async function updatePhotoSpaceAction(id: ObjectId, data: any) {
     const updated = await updatePhotoSpace(id, data)
     return JSON.parse(JSON.stringify((updated)))
 }
-
-export const uploadFileAction = (file: any) => {
-    const storageRef = ref(storage, `/files/images/${file.name}_${new Date().getTime()}`)
-    const uploadTask = uploadBytesResumable(storageRef, file)
-    return uploadTask
-}
