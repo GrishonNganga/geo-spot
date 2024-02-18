@@ -10,7 +10,7 @@ import {
     SheetHeader,
 
 } from "@/components/ui/sheet"
-import { IPhotoSpace, IUser } from "@/lib/types";
+import { IPhotoSpace, IUpload, IUser } from "@/lib/types";
 import UploadCard from "./uploads";
 import { Separator } from "@/components/ui/separator";
 import { getPopulatedInvitations } from "@/lib/actions";
@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InvitationModal from "./invitation-modal";
 import AddPhotosModal from "./photos-modal";
+import { ObjectId } from "mongoose";
 
 export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -36,6 +37,14 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
             const inv = await getPopulatedInvitations(photoSpace.invitations)
             setInvitations(inv)
         }
+    }
+    const getUserPhotos = (userId: ObjectId) => {
+        const userPhotos = photoSpace.uploads.find((upload: IUpload) => upload.userId === userId)
+        if (!userPhotos) {
+            return []
+        }
+        console.log("USER Photos", userPhotos)
+        return userPhotos.photos.map((photo: any) => photo.url)
     }
     return (
         <div>
@@ -66,7 +75,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                             <SheetDescription>
                                 Uploads
                             </SheetDescription>
-                            <UploadCard name={`${photoSpace?.ownerId?.name} (owner)`} photos={[]} addPhotosHandler={() => setAddPhotosModalOpen(!addPhotosModalOpen)} />
+                            <UploadCard name={`${photoSpace?.ownerId?.name} (owner)`} photos={getUserPhotos(photoSpace?.ownerId._id)} addPhotosHandler={() => setAddPhotosModalOpen(!addPhotosModalOpen)} />
                             <Separator />
                             <SheetDescription>
                                 Contributors

@@ -11,7 +11,7 @@ export default function UploadCard({ name, photos, addPhotosHandler }: { name: S
                     photos && photos.length > 0 && photos.map((photo, idx) => {
                         return (
                             <div key={idx}>
-                                <Image src="/photos-on-map.png" width={100} height={100} className="rounded w-16 h-16 object-cover" alt="photo" />
+                                <Image src={photo} width={100} height={100} className="rounded w-16 h-16 object-cover" alt="photo" />
                             </div>
                         )
                     })
