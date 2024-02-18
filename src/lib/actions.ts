@@ -1,7 +1,7 @@
 'use server'
 import { authOptions } from "@/pages/api/auth/[...nextauth].js"
 import { getServerSession } from "next-auth/next"
-import { IPhotoSpace } from "@/lib/types"
+import { IPhotoSpace, IUpload } from "@/lib/types"
 import { redirect } from "next/navigation"
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,6 +12,7 @@ import { createPhotoSpace, findPhotoSpaces, updatePhotoSpace } from "./database/
 import { ObjectId } from "mongoose"
 import { storage } from "./firebase"
 import { ref, uploadBytesResumable } from "firebase/storage"
+import { createUpload } from "./database/upload"
 
 export async function getSession() {
     const session = await getServerSession(authOptions)
@@ -69,4 +70,13 @@ export async function getPopulatedInvitations(emails: String[]) {
 export async function updatePhotoSpaceAction(id: ObjectId, data: any) {
     const updated = await updatePhotoSpace(id, data)
     return JSON.parse(JSON.stringify((updated)))
+}
+
+export async function createUploadAction(data: IUpload | IUpload[]) {
+    const user = await getLoggedInUser()
+    const uploads = await createUpload({ ...data, userId: user._id })
+    console.log("DDDD", data)
+    const updated = await updatePhotoSpace(data.photoSpaceId, { uploads: [uploads._id] })
+    console.log("UPPPP", updated)
+    return JSON.parse(JSON.stringify(uploads))
 }

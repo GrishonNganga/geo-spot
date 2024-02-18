@@ -19,12 +19,17 @@ import { Autocomplete, useJsApiLoader } from "@react-google-maps/api"
 import { toast } from "sonner"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { storage } from "@/lib/firebase"
+import CircularProgress from "@/components/ui/circular-progress"
+import { createUploadAction } from "@/lib/actions"
+import { IPhotoSpace } from "@/lib/types"
+import { getSession } from "next-auth/react"
 
 const libraries = ['places'];
 
-export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOpen: () => void }) {
+export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: boolean, photoSpace: IPhotoSpace, setOpen: () => void }) {
     const [uploads, setUploads] = useState<any>([])
     const [locationAutoComplete, setLocationAutoComplete] = useState(null)
+    const [uploadingInProgress, setUploadInProgress] = useState(false)
 
     const fileInputRef = useRef(null)
     const { isLoaded } = useJsApiLoader({
@@ -34,11 +39,22 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
     })
 
     useEffect(() => {
-        console.log("Uploads", uploads)
-        uploads.forEach((upload: any, idx: number) => {
-            uploadFile(upload, idx)
-        })
-    }, [uploads])
+        if (uploadingInProgress) {
+            let failed
+            for (const upload of uploads) {
+                if (!upload.url || !upload.metadata) {
+                    failed = true
+                    break
+                }
+            }
+            console.log("FAILED", failed, uploads)
+            if (failed) {
+                return
+            }
+            const filteredUploads = uploads.map(upload => ({ url: upload.url, metadata: upload.metadata }))
+            saveUploads(filteredUploads)
+        }
+    }, [uploads, uploadingInProgress])
 
     function handleUpload(e, preventDefault?: boolean) {
         if (preventDefault) {
@@ -47,33 +63,24 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
         let fileList
         fileList = e.target.files || e.dataTransfer.files;
         const filesArray = Array.from(fileList);
-        setUploads((prevState: any) => ([...prevState, ...filesArray]))
+        const filesArryWithAddedData = filesArray.map(async (file: any, idx: number) => {
+            if (file && file.name) {
+                const output = await exifr.parse(file)
+                const reader = new FileReader();
+                let fileObj: any = {}
+                fileObj.file = file
 
+                reader.readAsDataURL(file);
+
+                const d = reader.onload = (e) => {
+                    if (!e) { return }
+                    fileObj.preview = e.target.result
+                    fileObj.metadata = output
+                    setUploads((prevState: any) => ([...prevState, fileObj]))
+                }
+            };
+        })
     }
-
-    const uploadFile = async (file: any, index: number) => {
-        if (file && file.name) {
-            const output = await exifr.parse(file)
-            const reader = new FileReader();
-
-            reader.readAsDataURL(file);
-
-            reader.onload = (e) => {
-                if (!e) { return }
-                file.preview;
-                console.log("Output", output)
-                file.metadata = output
-
-                setUploads((prevState: any) => {
-                    prevState[index] = { ...prevState[index], 'preview': e.target.result, ...file }
-                    return [...prevState]
-                })
-            }
-            return true;
-        };
-
-    }
-
     const onPlaceChanged = (id: number) => {
         console.log("IDDDD", id)
         console.log("AA", locationAutoComplete)
@@ -115,8 +122,9 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
             }
         }
         if (failed) { return }
+        setUploadInProgress(true)
         for (const [index, photo] of uploads.entries()) {
-            const uploadTask = uploadFileToFirebase(photo);
+            const uploadTask = uploadFileToFirebase(photo.file);
             console.log("T", uploadTask)
             uploadTask.on(
                 "state_changed",
@@ -144,6 +152,15 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
         }
     }
 
+    const saveUploads = async (uploads: any) => {
+        const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace._id })
+        setUploadInProgress(false)
+        if (response) {
+            toast.success("Photos added successfully")
+        } else {
+            toast.error("Photos have not been added. Please try again")
+        }
+    }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-5xl max-h-screen overflow-y-scroll">
@@ -192,7 +209,15 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
                                     uploads.map((upload: any, idx: number) => {
                                         return (
                                             <li key={idx} className="flex items-center space-x-2 p-3 items-center">
-                                                <Image className="w-40 h-40 object-cover rounded-lg" src={upload.preview} width={100} height={100} alt={"Uploaded file"} />
+                                                <div className="relative w-40 h-40 ">
+                                                    <Image className="absolute w-full h-full object-cover rounded-lg" src={upload.uploadStatus ? "/loading.gif" : upload.preview} width={100} height={100} alt={"Uploaded file"} />
+                                                    {/* <div className="absolute w-full h-full flex justify-center items-center bg-gray-100 rounded-lg opacity-60">
+                                                    </div>
+                                                    <div className="absolute w-full h-full flex justify-center items-center rounded-lg">
+                                                        <CircularProgress progress={upload.uploadProgress} />
+                                                    </div> */}
+
+                                                </div>
                                                 <div className="">
                                                     {
                                                         isLoaded &&
@@ -224,7 +249,7 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
                     }
                 </div>
                 <DialogFooter>
-                    <Button type="submit" onClick={handleSubmit}>Save changes</Button>
+                    <Button type="submit" disabled={uploadingInProgress} onClick={handleSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

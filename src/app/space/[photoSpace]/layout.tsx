@@ -11,6 +11,7 @@ export default async function Layout({ params }: { params: { photoSpace: string 
     const session = await getSession()
     const loggedInUser = await getLoggedInUser()
     const photoSpace = JSON.parse(JSON.stringify(await getPhotoSpaceBySpaceId(photoSpaceId)))
+    console.log("photo space", photoSpace)
     if (!photoSpace) {
         return redirect('/404')
     }

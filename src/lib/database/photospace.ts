@@ -8,12 +8,12 @@ export const createPhotoSpace = async (data: IPhotoSpace) => {
 }
 
 export const findPhotoSpace = async (data: any) => {
-    const photoSpace = PhotoSpace.findOne(data).populate('ownerId')
+    const photoSpace = PhotoSpace.findOne(data).populate('ownerId').populate("uploads")
     return await photoSpace;
 }
 
 export const findPhotoSpaces = async (data: any) => {
-    const photoSpace = PhotoSpace.find(data).populate('ownerId')
+    const photoSpace = PhotoSpace.find(data).populate('ownerId').populate("uploads")
     return await photoSpace;
 }
 
@@ -34,6 +34,6 @@ export const updatePhotoSpace = async (_id: ObjectId, data: any) => {
     const photoSpace = await PhotoSpace.findOneAndUpdate({
         _id
     }, updateObject,
-        { upsert: false, new: true })
+        { upsert: false, new: true }).populate('ownerId').populate("uploads")
     return await photoSpace;
 }
