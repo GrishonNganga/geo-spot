@@ -13,7 +13,7 @@ import {
 import { IPhotoSpace, IUpload, IUser } from "@/lib/types";
 import UploadCard from "./uploads";
 import { Separator } from "@/components/ui/separator";
-import { getPopulatedInvitations } from "@/lib/actions";
+import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions";
 import ContributorCard from "./contributor";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -24,6 +24,7 @@ import { ObjectId } from "mongoose";
 export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
+    const [user, setUser] = useState()
     const [sendInvitationModalOpen, setSendInvitationModalOpen] = useState(false)
     const [addPhotosModalOpen, setAddPhotosModalOpen] = useState(false)
 
@@ -35,7 +36,9 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
         if (photoSpace.invitations) {
             let populatedInvitations
             const inv = await getPopulatedInvitations(photoSpace.invitations)
+            const user = await getLoggedInUser()
             setInvitations(inv)
+            setUser(user)
         }
     }
     const getUserPhotos = (userId: ObjectId) => {
@@ -98,20 +101,24 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                                         }
                                     })
                                 }
-                                {
-                                    photoSpace.invitations.length === 0 && invitations.length === 0 &&
-                                    <div className="w-full flex flex-col items-center gap-y-5">
-                                        <div className="">No contributors invited</div>
-                                        <div>
-                                            <Button variant={"outline"} onClick={() => { setSendInvitationModalOpen(true) }}>
-                                                Invite
+                                {photoSpace.ownerId._id === user._id &&
+                                    <>
+                                        {
+                                            photoSpace.invitations.length === 0 && invitations.length === 0 &&
+                                            <div className="w-full flex flex-col items-center gap-y-5">
+                                                <div className="">No contributors invited</div>
+                                                <div>
+                                                    <Button variant={"outline"} onClick={() => { setSendInvitationModalOpen(true) }}>
+                                                        Invite
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                            ||
+                                            <Button size={"sm"} variant={"ghost"} onClick={() => { setSendInvitationModalOpen(true) }}>
+                                                <PlusIcon className="w-5 h-5" />
                                             </Button>
-                                        </div>
-                                    </div>
-                                    ||
-                                    <Button size={"sm"} variant={"ghost"} onClick={() => { setSendInvitationModalOpen(true) }}>
-                                        <PlusIcon className="w-5 h-5" />
-                                    </Button>
+                                        }
+                                    </>
                                 }
                             </div>
                         </div>
@@ -124,6 +131,6 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
             }
             <InvitationModal open={sendInvitationModalOpen} setOpen={() => { setSendInvitationModalOpen(!sendInvitationModalOpen) }} photoSpace={photoSpace} setInvitations={(inv: String[]) => { setInvitations(inv) }} />
             <AddPhotosModal open={addPhotosModalOpen} setOpen={() => { setAddPhotosModalOpen(!addPhotosModalOpen) }} photoSpace={photoSpace} />
-        </div>
+        </div >
     )
 }
