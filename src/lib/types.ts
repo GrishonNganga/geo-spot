@@ -21,7 +21,7 @@ export type IPhotoSpace = {
     ownerId?: ObjectId,
     invitations?: String[],
     access: boolean,
-    photos?: IUpload[]
+    uploads?: IUpload[]
 }
 
 export type IUpload = {

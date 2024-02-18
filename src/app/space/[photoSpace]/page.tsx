@@ -3,6 +3,6 @@ import { IPhotoSpace } from "@/lib/types";
 
 export default function Page({ photoSpace }: { photoSpace: IPhotoSpace }) {
     return (
-        <Map />
+        <Map uploads={photoSpace.uploads}/>
     )
 }
