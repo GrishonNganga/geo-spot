@@ -1,7 +1,7 @@
 'use client'
 import { IUpload } from '@/lib/types';
 import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MarkerClusterer } from '@googlemaps/markerclusterer';
 import type { Marker } from '@googlemaps/markerclusterer';
 import Image from 'next/image';
@@ -10,7 +10,6 @@ import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
-    TooltipTrigger,
 } from "@/components/ui/tooltip"
 
 export default function MyMap({ uploads }: { uploads: IUpload[] }) {
@@ -40,7 +39,6 @@ export default function MyMap({ uploads }: { uploads: IUpload[] }) {
                 points.push({ url: photo.url, name: photo.metadata.location, lat: photo.metadata.latitude, lng: photo.metadata.longitude, key: JSON.stringify(photo) })
             })
         })
-        console.log("Points", points)
         return points
     }
     return (
@@ -107,7 +105,7 @@ const Markers = ({ points }: Props) => {
                     <TooltipProvider>
                         <Tooltip open={true}>
                             <TooltipContent className='p-1'>
-                                <Image src={point.url} alt="Photo" width={100} height={100} className='w-20 h-20 rounded-md' />
+                                <Image src={point.url} alt="Photo" width={100} height={100} className='w-20 h-20 rounded-md object-cover' />
                             </TooltipContent>
                         </Tooltip>
                     </TooltipProvider>

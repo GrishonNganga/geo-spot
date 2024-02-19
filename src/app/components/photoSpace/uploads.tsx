@@ -1,32 +1,29 @@
-import { Button } from "@/components/ui/button"
-import { CardTitle } from "@/components/ui/card"
-import Image from "next/image"
+import { IUpload, IUser } from "@/lib/types";
+import UploadCard from "./upload-card";
+import { Separator } from "@/components/ui/separator";
 
-export default function UploadCard({ name, photos, addPhotosHandler }: { name: String, photos?: String[], addPhotosHandler: () => void }) {
+export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: IUpload[], owner: IUser, user: IUser, addPhotos: (status: boolean) => void }) {
+
     return (
-        <div className="w-full shadow rounded-md border p-3">
-            <CardTitle className="text-base border-b pb-2">{name}</CardTitle>
-            <div className="flex gap-3 flex-wrap mt-3">
-                {
-                    photos && photos.length > 0 && photos.map((photo, idx) => {
-                        return (
-                            <div key={idx}>
-                                <Image src={photo} width={100} height={100} className="rounded w-16 h-16 object-cover" alt="photo" />
-                            </div>
-                        )
-                    })
-                    ||
-                    <div className="w-full flex flex-col items-center gap-y-5">
-                        <div className="">No photos added</div>
-                        <div>
-                            <Button variant={"outline"} onClick={addPhotosHandler}>
-                                Add photos
-                            </Button>
-                        </div>
-                    </div>
-                }
+        <>
+            {
+                !uploads.find(upload => upload.userId._id === user._id) &&
+                <>
+                    <UploadCard name={`${user.name} (me)`} photos={[]} showAddPhotosButton={false} addPhotos={() => { addPhotos(true) }} />
+                    <Separator />
+                </>
 
-            </div>
-        </div>
+            }
+            {
+                uploads.map((upload: IUpload) => {
+                    return (
+                        <>
+                            <UploadCard name={`${upload?.userId?.name} ${upload.userId._id === user._id && "(me)"}`} photos={upload.photos?.map(p => p.url) || []} showAddPhotosButton={user._id === owner._id} addPhotos={() => { addPhotos(true) }} />
+                            <Separator />
+                        </>
+                    )
+                })
+            }
+        </>
     )
 }

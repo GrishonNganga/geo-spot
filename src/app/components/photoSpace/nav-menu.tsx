@@ -11,7 +11,7 @@ import {
 
 } from "@/components/ui/sheet"
 import { IPhotoSpace, IUpload, IUser } from "@/lib/types";
-import UploadCard from "./uploads";
+import UploadCard from "./upload-card";
 import { Separator } from "@/components/ui/separator";
 import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions";
 import ContributorCard from "./contributor";
@@ -20,6 +20,7 @@ import Link from "next/link";
 import InvitationModal from "./invitation-modal";
 import AddPhotosModal from "./photos-modal";
 import { ObjectId } from "mongoose";
+import Uploads from "./uploads";
 
 export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -42,7 +43,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
         }
     }
     const getUserPhotos = (userId: ObjectId) => {
-        const userPhotos = photoSpace.uploads.find((upload: IUpload) => upload.userId === userId)
+        const userPhotos = photoSpace.uploads.find((upload: IUpload) => upload.userId._id === userId)
         if (!userPhotos) {
             return []
         }
@@ -78,8 +79,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                             <SheetDescription>
                                 Uploads
                             </SheetDescription>
-                            <UploadCard name={`${photoSpace?.ownerId?.name} (owner)`} photos={getUserPhotos(photoSpace?.ownerId._id)} addPhotosHandler={() => setAddPhotosModalOpen(!addPhotosModalOpen)} />
-                            <Separator />
+                            <Uploads uploads={photoSpace.uploads || []} owner={photoSpace.ownerId} user={user} addPhotos={(status: boolean) => { setAddPhotosModalOpen(status) }} />
                             <SheetDescription>
                                 Contributors
                             </SheetDescription>
