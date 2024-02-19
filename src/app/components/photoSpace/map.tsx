@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/tooltip"
 
 export default function MyMap({ uploads }: { uploads: IUpload[] }) {
-    console.log("U", uploads)
     const [userLocation, setUserLocation] = useState(null);
 
     useEffect(() => {

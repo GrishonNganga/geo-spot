@@ -101,7 +101,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                                         }
                                     })
                                 }
-                                {photoSpace.ownerId._id === user._id &&
+                                {photoSpace.ownerId._id === user?._id &&
                                     <>
                                         {
                                             photoSpace.invitations.length === 0 && invitations.length === 0 &&
