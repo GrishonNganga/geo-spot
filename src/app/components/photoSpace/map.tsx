@@ -2,8 +2,7 @@
 import { IUpload } from '@/lib/types';
 import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
 import { useEffect, useRef, useState } from 'react';
-import { MarkerClusterer } from '@googlemaps/markerclusterer';
-import type { Marker } from '@googlemaps/markerclusterer';
+import { MarkerClusterer, Marker, GridAlgorithm } from '@googlemaps/markerclusterer';
 import Image from 'next/image';
 
 import {
@@ -65,12 +64,11 @@ const Markers = ({ points }: Props) => {
     const map = useMap();
     const [markers, setMarkers] = useState<{ [key: string]: Marker }>({});
     const clusterer = useRef<MarkerClusterer | null>(null);
-
     // Initialize MarkerClusterer
     useEffect(() => {
         if (!map) return;
         if (!clusterer.current) {
-            clusterer.current = new MarkerClusterer({ map });
+            clusterer.current = new MarkerClusterer({ map, algorithm: new GridAlgorithm({}) });
         }
     }, [map]);
 
