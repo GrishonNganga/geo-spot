@@ -157,6 +157,11 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         setUploadInProgress(false)
         if (response) {
             toast.success("Photos added successfully")
+            setTimeout(() => {
+                setUploads([])
+                setLocationAutoComplete(null)
+                setOpen()
+            }, 1000)
         } else {
             toast.error("Photos have not been added. Please try again")
         }

@@ -28,7 +28,7 @@ export const updatePhotoSpace = async (_id: ObjectId, data: any) => {
         if (Array.isArray(data[key])) {
             updateObject.$addToSet = { [key]: data[key] };
         } else {
-            updateObject.$set = { key: data[key] };
+            updateObject.$set = { [key]: data[key] };
         }
     }
     const photoSpace = await PhotoSpace.findOneAndUpdate({

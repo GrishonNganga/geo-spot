@@ -23,6 +23,7 @@ import { ObjectId } from "mongoose";
 import Uploads from "./uploads";
 
 export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
+    console.log("PSS", photoSpace)
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
     const [user, setUser] = useState()
@@ -92,7 +93,7 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                                     })
                                 }
                                 {
-                                    photoSpace && photoSpace?.invitations?.map(email => {
+                                    invitations && photoSpace && photoSpace?.invitations?.map(email => {
                                         if (!invitations.find((invitation: IUser) => invitation.email === email)) {
                                             return (
                                                 <ContributorCard name={""} photo={"" as string} email={email as string} />
