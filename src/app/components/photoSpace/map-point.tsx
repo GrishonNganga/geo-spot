@@ -6,10 +6,12 @@ import {
     TooltipContent,
     TooltipProvider,
 } from "@/components/ui/tooltip"
+import MapPhotoDisplay from "./map-photo-display";
+import { useEffect, useState } from "react";
 
-export default function MapPoint({ point }: { point: Point }) {
+export default function MapPoint({ point, open, setOpen }: { point: Point, open: boolean, setOpen: () => void }) {
     return (
-        <>
+        <div>
             <TooltipProvider>
                 <Tooltip open={true}>
                     <TooltipContent className='p-1 cursor-pointer'>
@@ -17,7 +19,7 @@ export default function MapPoint({ point }: { point: Point }) {
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-
-        </>
+            {open && <MapPhotoDisplay open={open} point={point} setOpen={setOpen}/>}
+        </div>
     )
 }

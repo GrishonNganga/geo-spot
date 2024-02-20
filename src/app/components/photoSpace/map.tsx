@@ -4,9 +4,9 @@ import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-m
 import { useEffect, useRef, useState } from 'react';
 import { MarkerClusterer, Marker, GridAlgorithm } from '@googlemaps/markerclusterer';
 
-import MapPoint from './MapPoint';
+import MapPoint from './map-point';
 
-export default function MyMap({ uploads }: { uploads: IUpload[] }) {
+export default function MyMap({ uploads }: { uploads: IUpload[] | undefined }) {
     const [userLocation, setUserLocation] = useState(null);
 
     useEffect(() => {
@@ -58,6 +58,8 @@ type Props = { points: Point[] };
 const Markers = ({ points }: Props) => {
     const map = useMap();
     const [markers, setMarkers] = useState<{ [key: string]: Marker }>({});
+    const [clicked, setClicked] = useState<number | null>(null)
+
     const clusterer = useRef<MarkerClusterer | null>(null);
     // Initialize MarkerClusterer
     useEffect(() => {
@@ -92,15 +94,17 @@ const Markers = ({ points }: Props) => {
 
     return (
         <>
-            {points.length > 0 && points.map(point => (
-                <AdvancedMarker
-                    position={point}
-                    key={point.key}
-                    className='cursor-pointer'
-                    onClick={() => { window.alert("Clicked " + point.key + " " + JSON.stringify(point)) }}
-                    ref={marker => setMarkerRef(marker, point.key)}>
-                    <MapPoint point={point} />
-                </AdvancedMarker>
+            {points.length > 0 && points.map((point, idx) => (
+                <>
+                    <AdvancedMarker
+                        position={point}
+                        key={point.key}
+                        className='cursor-pointer'
+                        onClick={() => setClicked(idx)}
+                        ref={marker => setMarkerRef(marker, point.key)}>
+                        <MapPoint point={point} open={idx === clicked} setOpen={() => { setClicked(null) }} />
+                    </AdvancedMarker>
+                </>
             ))}
         </>
     );
