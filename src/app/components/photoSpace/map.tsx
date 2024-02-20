@@ -1,15 +1,10 @@
 'use client'
-import { IUpload } from '@/lib/types';
+import { IUpload, Point } from '@/lib/types';
 import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
 import { useEffect, useRef, useState } from 'react';
 import { MarkerClusterer, Marker, GridAlgorithm } from '@googlemaps/markerclusterer';
-import Image from 'next/image';
 
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-} from "@/components/ui/tooltip"
+import MapPoint from './MapPoint';
 
 export default function MyMap({ uploads }: { uploads: IUpload[] }) {
     const [userLocation, setUserLocation] = useState(null);
@@ -57,7 +52,7 @@ export default function MyMap({ uploads }: { uploads: IUpload[] }) {
     )
 };
 
-type Point = google.maps.LatLngLiteral & { key: string };
+
 type Props = { points: Point[] };
 
 const Markers = ({ points }: Props) => {
@@ -74,8 +69,10 @@ const Markers = ({ points }: Props) => {
 
     // Update markers
     useEffect(() => {
-        clusterer.current?.clearMarkers();
-        clusterer.current?.addMarkers(Object.values(markers));
+        if (Object.keys(markers).length > 0) {
+            clusterer.current?.addMarkers(Object.values(markers));
+        }
+        return () => { clusterer.current && clusterer.current?.clearMarkers(); }
     }, [markers]);
 
     const setMarkerRef = (marker: Marker | null, key: string) => {
@@ -95,18 +92,14 @@ const Markers = ({ points }: Props) => {
 
     return (
         <>
-            {points.map(point => (
+            {points.length > 0 && points.map(point => (
                 <AdvancedMarker
                     position={point}
                     key={point.key}
+                    className='cursor-pointer'
+                    onClick={() => { window.alert("Clicked " + point.key + " " + JSON.stringify(point)) }}
                     ref={marker => setMarkerRef(marker, point.key)}>
-                    <TooltipProvider>
-                        <Tooltip open={true}>
-                            <TooltipContent className='p-1'>
-                                <Image src={point.url} alt="Photo" width={100} height={100} className='w-20 h-20 rounded-md object-cover' />
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <MapPoint point={point} />
                 </AdvancedMarker>
             ))}
         </>
