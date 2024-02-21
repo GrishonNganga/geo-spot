@@ -8,7 +8,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
     const setPhotoSpace = photoSpaceStore(state => state.setPhotoSpace)
     useEffect(() => {
         setPhotoSpace(photoSpace)
-    }, [photoSpace])
+    }, [photoSpace, setPhotoSpace])
 
     return (
         <Map uploads={photoSpace.uploads} />

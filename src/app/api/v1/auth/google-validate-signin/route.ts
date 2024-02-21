@@ -21,9 +21,9 @@ export const GET = async (_req: NextRequest, _res: NextResponse) => {
     try {
         // Create a new user with the hashed password
         const user = await createUser({
-            name: session.user.name,
-            email: session.user.email || "",
-            image: session.user?.image
+            name: session.user.name!,
+            email: session.user.email!,
+            image: session.user?.image!
         })
     } catch (err: any) {
         if (err.code === 11000) {

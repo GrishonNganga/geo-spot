@@ -109,7 +109,7 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
                                 className={cn("w-full placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50")}
                                 theme={(theme) => ({
                                     ...theme,
-                                    borderRadius: "1rem",
+                                    borderRadius: 16,
                                     colors: {
                                         ...theme.colors,
                                         primary25: 'hotpink',
