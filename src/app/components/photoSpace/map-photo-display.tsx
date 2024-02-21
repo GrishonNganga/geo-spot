@@ -4,7 +4,6 @@ import { InfoWindow } from '@vis.gl/react-google-maps';
 import Image from "next/image";
 
 export default function MapPhotoDisplay({ point }: { point: Point }) {
-    console.log("Point", point)
     return (
         <div>
             {
