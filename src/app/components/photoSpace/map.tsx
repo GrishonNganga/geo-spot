@@ -67,17 +67,21 @@ const Markers = ({ points }: Props) => {
     useEffect(() => {
         if (!map) return;
         if (!clusterer.current) {
-            clusterer.current = new MarkerClusterer({ map, algorithm: new GridAlgorithm({}) });
+            clusterer.current = new MarkerClusterer({ map });
         }
     }, [map]);
 
     // Update markers
     useEffect(() => {
-        if (Object.keys(markers).length > 0) {
-            clusterer.current?.addMarkers(Object.values(markers));
+        if (Object.keys(markers).length > 0 && clusterer.current) {
+            clusterer.current.addMarkers(Object.values(markers));
         }
-        return () => { Object.keys(markers).length > 0 && clusterer.current?.clearMarkers(); }
-    }, [markers]);
+        return () => {
+            if (Object.keys(markers).length > 0 && clusterer.current) {
+                clusterer.current.clearMarkers();
+            }
+        };
+    }, [markers, clusterer]);
 
     const setMarkerRef = (marker: Marker | null, key: string) => {
         if (marker && markers[key]) return;
