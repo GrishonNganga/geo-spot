@@ -19,10 +19,8 @@ import { Autocomplete, useJsApiLoader } from "@react-google-maps/api"
 import { toast } from "sonner"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { storage } from "@/lib/firebase"
-import CircularProgress from "@/components/ui/circular-progress"
 import { createUploadAction } from "@/lib/actions"
 import { IPhotoSpace } from "@/lib/types"
-import { getSession } from "next-auth/react"
 
 const libraries = ['places'];
 
@@ -38,22 +36,23 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         libraries
     })
 
-    const saveUploads = async (uploads: any) => {
-        const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace._id })
-        setUploadInProgress(false)
-        if (response) {
-            toast.success("Photos added successfully")
-            setTimeout(() => {
-                setUploads([])
-                setLocationAutoComplete(null)
-                setOpen()
-            }, 1000)
-        } else {
-            toast.error("Photos have not been added. Please try again")
-        }
-    }
-    
     useEffect(() => {
+
+        const saveUploads = async (uploads: any) => {
+            const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace._id })
+            setUploadInProgress(false)
+            if (response) {
+                toast.success("Photos added successfully")
+                setTimeout(() => {
+                    setUploads([])
+                    setLocationAutoComplete(null)
+                    setOpen()
+                }, 1000)
+            } else {
+                toast.error("Photos have not been added. Please try again")
+            }
+        }
+
         if (uploadingInProgress) {
             let failed
             for (const upload of uploads) {
@@ -68,7 +67,7 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
             const filteredUploads = uploads.map(upload => ({ url: upload.url, metadata: upload.metadata }))
             saveUploads(filteredUploads)
         }
-    }, [uploads, uploadingInProgress, saveUploads])
+    }, [uploads, uploadingInProgress, photoSpace?._id, setOpen])
 
     function handleUpload(e, preventDefault?: boolean) {
         if (preventDefault) {

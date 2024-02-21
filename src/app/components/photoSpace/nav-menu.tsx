@@ -10,7 +10,7 @@ import {
     SheetHeader,
 
 } from "@/components/ui/sheet"
-import { IPhotoSpace, IUpload, IUser } from "@/lib/types";
+import { IPhotoSpace, IUser } from "@/lib/types";
 import { Separator } from "@/components/ui/separator";
 import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions";
 import ContributorCard from "./contributor";
@@ -18,29 +18,32 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InvitationModal from "./invitation-modal";
 import AddPhotosModal from "./photos-modal";
-import { ObjectId } from "mongoose";
 import Uploads from "./uploads";
+import { photoSpaceStore } from "@/store";
 
-export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
+export default function NavMenu() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
     const [user, setUser] = useState()
     const [sendInvitationModalOpen, setSendInvitationModalOpen] = useState(false)
     const [addPhotosModalOpen, setAddPhotosModalOpen] = useState(false)
+    const photoSpace = photoSpaceStore(state => state.photoSpace)
 
     useEffect(() => {
-        pullUsers()
-    }, [])
 
-    const pullUsers = async () => {
-        if (photoSpace.invitations) {
-            let populatedInvitations
-            const inv = await getPopulatedInvitations(photoSpace.invitations)
-            const user = await getLoggedInUser()
-            setInvitations(inv)
-            setUser(user)
+        const pullUsers = async () => {
+            if (photoSpace?.invitations) {
+                let populatedInvitations
+                const inv = await getPopulatedInvitations(photoSpace.invitations)
+                const user = await getLoggedInUser()
+                setInvitations(inv)
+                setUser(user)
+            }
         }
-    }
+
+        pullUsers()
+    }, [photoSpace?.invitations])
+
     return (
         <div>
             {

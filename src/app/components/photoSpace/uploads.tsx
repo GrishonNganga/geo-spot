@@ -5,24 +5,26 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: IUpload[], owner: IUser, user: IUser, addPhotos: (status: boolean) => void }) {
 
-    const aggregateUploads = () => {
-        const groupedUploads = uploads.reduce((acc, curr) => {
-            const userId = curr.userId._id;
-            if (acc[userId]) {
-                acc[userId].photos.push(...(curr.photos ? curr.photos : []));
-            } else {
-                acc[userId] = { _id: curr._id, userId: curr.userId, photos: [...(curr.photos ? curr.photos : [])] };
-            }
-            return acc;
-        }, {});
-        return Object.keys(groupedUploads).map(id => {
-            const userId = groupedUploads[id].userId
-            const photos = groupedUploads[id].photos
-            const _id = groupedUploads[id]._id
-            return { userId, photos, _id }
-        })
-    }
-    const aggregatedUploads = useMemo(() => aggregateUploads(), [aggregateUploads])
+    const aggregatedUploads = useMemo(() => {
+        const aggregateUploads = () => {
+            const groupedUploads = uploads.reduce((acc, curr) => {
+                const userId = curr.userId._id;
+                if (acc[userId]) {
+                    acc[userId].photos.push(...(curr.photos ? curr.photos : []));
+                } else {
+                    acc[userId] = { _id: curr._id, userId: curr.userId, photos: [...(curr.photos ? curr.photos : [])] };
+                }
+                return acc;
+            }, {});
+            return Object.keys(groupedUploads).map(id => {
+                const userId = groupedUploads[id].userId
+                const photos = groupedUploads[id].photos
+                const _id = groupedUploads[id]._id
+                return { userId, photos, _id }
+            })
+        }
+        return aggregateUploads()
+    }, [uploads])
     const handleAddPhotos = useCallback(() => addPhotos(true), [addPhotos]);
 
     return (

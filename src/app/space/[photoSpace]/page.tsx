@@ -1,8 +1,9 @@
-import Map from "@/app/components/photoSpace/map";
-import { IPhotoSpace } from "@/lib/types";
+import Space from "@/app/components/photoSpace/space"
 
-export default function Page({ photoSpace }: { photoSpace: IPhotoSpace }) {
+export default function Page({ params }: {
+    params: { photoSpace: string }
+}) {
     return (
-        <Map uploads={photoSpace.uploads} />
+        <Space params={params} />
     )
 }
