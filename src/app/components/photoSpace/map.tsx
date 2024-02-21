@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { MarkerClusterer, Marker, GridAlgorithm } from '@googlemaps/markerclusterer';
 
 import MapPoint from './map-point';
+import { photoStore } from '@/store';
 
 export default function MyMap({ uploads }: { uploads: IUpload[] | undefined }) {
     const [userLocation, setUserLocation] = useState(null);
@@ -30,7 +31,7 @@ export default function MyMap({ uploads }: { uploads: IUpload[] | undefined }) {
         const points: any = []
         uploads.forEach(upload => {
             upload.photos.forEach((photo: any) => {
-                points.push({ url: photo.url, name: photo.metadata.location, lat: photo.metadata.latitude, lng: photo.metadata.longitude, key: JSON.stringify(photo), metadata: { ...(photo.metadata ? photo.metadata : {}) } })
+                points.push({ url: photo.url, name: photo.metadata.location, lat: photo.metadata.latitude, lng: photo.metadata.longitude, key: `${upload._id}`, metadata: { ...(photo.metadata ? photo.metadata : {}) } })
             })
         })
         return points
@@ -58,7 +59,8 @@ type Props = { points: Point[] };
 const Markers = ({ points }: Props) => {
     const map = useMap();
     const [markers, setMarkers] = useState<{ [key: string]: Marker }>({});
-    const [clicked, setClicked] = useState<number | null>(null)
+    const open = photoStore(state => state.open)
+    const setOpen = photoStore(state => state.setOpen)
 
     const clusterer = useRef<MarkerClusterer | null>(null);
     // Initialize MarkerClusterer
@@ -100,9 +102,9 @@ const Markers = ({ points }: Props) => {
                         position={point}
                         key={point.key}
                         className='cursor-pointer'
-                        onClick={() => setClicked(idx)}
+                        onClick={() => setOpen(`${point.key},${idx}`)}
                         ref={marker => setMarkerRef(marker, point.key)}>
-                        <MapPoint point={point} open={idx === clicked} setOpen={() => { setClicked(null) }} />
+                        <MapPoint point={point} open={`${point.key},${idx}` === open} setOpen={() => { setOpen(null) }} />
                     </AdvancedMarker>
                 </>
             ))}

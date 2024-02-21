@@ -9,6 +9,7 @@ import {
 import MapPhotoDisplay from "./map-photo-display";
 
 export default function MapPoint({ point, open, setOpen }: { point: Point, open: boolean, setOpen: () => void }) {
+    console.log("P", point)
     return (
         <div className="bg-red-500">
             <TooltipProvider>

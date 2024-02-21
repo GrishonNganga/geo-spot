@@ -11,15 +11,15 @@ export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: 
             if (acc[userId]) {
                 acc[userId].photos.push(...(curr.photos ? curr.photos : []));
             } else {
-                acc[userId] = { userId: curr.userId, photos: [...(curr.photos ? curr.photos : [])] };
+                acc[userId] = { _id: curr._id, userId: curr.userId, photos: [...(curr.photos ? curr.photos : [])] };
             }
             return acc;
         }, {});
-        console.log("GR", groupedUploads)
         return Object.keys(groupedUploads).map(id => {
             const userId = groupedUploads[id].userId
             const photos = groupedUploads[id].photos
-            return { userId, photos }
+            const _id = groupedUploads[id]._id
+            return { userId, photos, _id }
         })
     }
     const aggregatedUploads = useMemo(() => aggregateUploads(), [uploads])
@@ -39,7 +39,7 @@ export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: 
                 aggregatedUploads.map((upload: IUpload, idx: number) => {
                     return (
                         <div key={idx}>
-                            <UploadCard name={`${upload?.userId?.name} ${upload.userId._id === user._id ? "(me)" : ""}`} photos={upload.photos?.map(p => p.url) || []} showAddPhotosButton={user._id === upload.userId._id} addPhotos={handleAddPhotos} />
+                            <UploadCard uploadId={upload._id} name={`${upload?.userId?.name} ${upload.userId._id === user._id ? "(me)" : ""}`} photos={upload.photos?.map(p => p.url) || []} showAddPhotosButton={user._id === upload.userId._id} addPhotos={handleAddPhotos} />
                             <Separator />
                         </div>
                     )

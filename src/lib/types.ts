@@ -26,7 +26,7 @@ export type IPhotoSpace = {
 
 export type IUpload = {
     _id?: ObjectId,
-    userId?: ObjectId,
+    userId?: ObjectId | IUser,
     photoSpaceId?: ObjectId,
     photos?: { url: string, metadata: any }[]
 }

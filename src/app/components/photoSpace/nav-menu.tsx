@@ -11,7 +11,6 @@ import {
 
 } from "@/components/ui/sheet"
 import { IPhotoSpace, IUpload, IUser } from "@/lib/types";
-import UploadCard from "./upload-card";
 import { Separator } from "@/components/ui/separator";
 import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions";
 import ContributorCard from "./contributor";
@@ -23,7 +22,6 @@ import { ObjectId } from "mongoose";
 import Uploads from "./uploads";
 
 export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
-    console.log("PSS", photoSpace)
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
     const [user, setUser] = useState()
