@@ -1,21 +1,28 @@
 import { Point } from "@/lib/types";
 
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-} from "@/components/ui/tooltip"
+import { InfoWindow } from '@vis.gl/react-google-maps';
+import Image from "next/image";
 
-export default function MapPhotoDisplay({ point, open, setOpen }: { point: Point, open: boolean, setOpen: () => void }) {
+export default function MapPhotoDisplay({ point }: { point: Point }) {
+    console.log("Point", point)
     return (
-        <>
-            <TooltipProvider>
-                <Tooltip open={true}>
-                    <TooltipContent className='p-1 cursor-pointer' onPointerDownOutside={setOpen}>
-                        Something here
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-        </>
+        <div>
+            {
+                <InfoWindow maxWidth={1000} position={{ lat: point.lat, lng: point.lng }}>
+                    <div className='cursor-pointer w-full lg:w-screen lg:max-w-lg flex flex-col gap-y-2'>
+                        <div>
+                            {point.metadata?.make || ""}
+                        </div>
+                        <div>
+                            {point.metadata?.location || ""}
+                        </div>
+                        <div>
+                            {point.metadata?.description || ""}
+                        </div>
+                        <Image src={point.url} alt="Photo" width={500} height={500} className='w-full object-cover' />
+                    </div>
+                </InfoWindow>
+            }
+        </div>
     )
 }

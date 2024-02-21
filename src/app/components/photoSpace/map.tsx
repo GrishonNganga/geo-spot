@@ -30,7 +30,7 @@ export default function MyMap({ uploads }: { uploads: IUpload[] | undefined }) {
         const points: any = []
         uploads.forEach(upload => {
             upload.photos.forEach((photo: any) => {
-                points.push({ url: photo.url, name: photo.metadata.location, lat: photo.metadata.latitude, lng: photo.metadata.longitude, key: JSON.stringify(photo) })
+                points.push({ url: photo.url, name: photo.metadata.location, lat: photo.metadata.latitude, lng: photo.metadata.longitude, key: JSON.stringify(photo), metadata: { ...(photo.metadata ? photo.metadata : {}) } })
             })
         })
         return points
@@ -74,7 +74,7 @@ const Markers = ({ points }: Props) => {
         if (Object.keys(markers).length > 0) {
             clusterer.current?.addMarkers(Object.values(markers));
         }
-        return () => { clusterer.current && clusterer.current?.clearMarkers(); }
+        return () => { Object.keys(markers).length > 0 && clusterer.current?.clearMarkers(); }
     }, [markers]);
 
     const setMarkerRef = (marker: Marker | null, key: string) => {
