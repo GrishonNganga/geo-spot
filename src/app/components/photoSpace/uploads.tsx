@@ -28,7 +28,7 @@ export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: 
     return (
         <>
             {
-                !aggregatedUploads.find(upload => upload.userId._id === user._id) &&
+                user && !aggregatedUploads.find(upload => upload.userId._id === user._id) &&
                 <>
                     <UploadCard name={`${user.name} (me)`} photos={[]} showAddPhotosButton={false} addPhotos={handleAddPhotos} />
                     <Separator />
@@ -39,7 +39,7 @@ export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: 
                 aggregatedUploads.map((upload: IUpload, idx: number) => {
                     return (
                         <div key={idx}>
-                            <UploadCard uploadId={upload._id} name={`${upload?.userId?.name} ${upload.userId._id === user._id ? "(me)" : ""}`} photos={upload.photos?.map(p => p.url) || []} showAddPhotosButton={user._id === upload.userId._id} addPhotos={handleAddPhotos} />
+                            <UploadCard uploadId={upload._id} name={`${upload?.userId?.name} ${upload.userId._id === user?._id ? "(me)" : ""}`} photos={upload.photos?.map(p => p.url) || []} showAddPhotosButton={user?._id === upload.userId._id} addPhotos={handleAddPhotos} />
                             <Separator />
                         </div>
                     )

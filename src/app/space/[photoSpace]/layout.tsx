@@ -10,9 +10,6 @@ export default async function Layout({ params }: { params: { photoSpace: string 
     const photoSpaceId = params?.photoSpace
     const session = await getSession()
     const loggedInUser = await getLoggedInUser()
-    if (!loggedInUser) {
-        return redirect('/')
-    }
     const photoSpace = JSON.parse(JSON.stringify(await getPhotoSpaceBySpaceId(photoSpaceId)))
     console.log("photo space", photoSpace)
     if (!photoSpace) {
@@ -24,14 +21,14 @@ export default async function Layout({ params }: { params: { photoSpace: string 
         }
         return true
     }
-    const hasAccess = (userId: String) => {
+    const hasAccess = (userId?: String) => {
         if (!photoSpace.access) {
             return true
         }
         return photoSpace.invitations.includes(loggedInUser.email)
     }
 
-    if (!hasAccess(loggedInUser._id.toString()) && !isOwner(loggedInUser._id.toString())) {
+    if (!hasAccess(loggedInUser?._id?.toString()) && !isOwner(loggedInUser?._id?.toString())) {
         // TODO: Work on hasAccess() check once that feature is done.
         return redirect('/403')
     }

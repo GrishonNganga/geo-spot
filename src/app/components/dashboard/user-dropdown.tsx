@@ -40,26 +40,29 @@ export default function UserDropDown({ session }: { session: any }) {
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Avatar>
-                        <AvatarImage src={session.user.image} alt={`${session.user.name}`} />
-                        <AvatarFallback className="capitalize font-semibold tex-lg cursor-pointer">
-                            {session.user.name.split(" ")[0][0]} {session.user.name.split(" ")[1][0]}
-                        </AvatarFallback>
-                    </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={() => { signOut() }}>
-                            <LogOutIcon className="mr-2 h-4 w-4" />
-                            <span>Logout</span>
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            {
+                session &&
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Avatar>
+                            <AvatarImage src={session.user.image} alt={`${session.user.name}`} />
+                            <AvatarFallback className="capitalize font-semibold tex-lg cursor-pointer">
+                                {session.user.name.split(" ")[0][0]} {session.user.name.split(" ")[1][0]}
+                            </AvatarFallback>
+                        </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem onClick={() => { signOut() }}>
+                                <LogOutIcon className="mr-2 h-4 w-4" />
+                                <span>Logout</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            }
         </div>
     )
 }

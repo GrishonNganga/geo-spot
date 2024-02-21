@@ -41,14 +41,6 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
             setUser(user)
         }
     }
-    const getUserPhotos = (userId: ObjectId) => {
-        const userPhotos = photoSpace.uploads.find((upload: IUpload) => upload.userId._id === userId)
-        if (!userPhotos) {
-            return []
-        }
-        console.log("USER Photos", userPhotos)
-        return userPhotos.photos.map((photo: any) => photo.url)
-    }
     return (
         <div>
             {
