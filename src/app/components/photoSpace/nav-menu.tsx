@@ -84,17 +84,17 @@ export default function NavMenu({ photoSpace }: { photoSpace: IPhotoSpace }) {
                             </SheetDescription>
                             <div className="flex gap-2 flex-wrap items-center">
                                 {
-                                    invitations && invitations.length > 0 && invitations.map((invitation: IUser) => {
+                                    invitations && invitations.length > 0 && invitations.map((invitation: IUser, id: number) => {
                                         return (
-                                            <ContributorCard name={invitation.name as string} photo={invitation.image as string} email={invitation.email as string} />
+                                            <ContributorCard key={id} name={invitation.name as string} photo={invitation.image as string} email={invitation.email as string} />
                                         )
                                     })
                                 }
                                 {
-                                    invitations && photoSpace && photoSpace?.invitations?.map(email => {
+                                    invitations && photoSpace && photoSpace?.invitations?.map((email, id) => {
                                         if (!invitations.find((invitation: IUser) => invitation.email === email)) {
                                             return (
-                                                <ContributorCard name={""} photo={"" as string} email={email as string} />
+                                                <ContributorCard key={id} name={""} photo={"" as string} email={email as string} />
 
                                             )
                                         }

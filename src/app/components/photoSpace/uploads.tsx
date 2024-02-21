@@ -22,7 +22,7 @@ export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: 
             return { userId, photos, _id }
         })
     }
-    const aggregatedUploads = useMemo(() => aggregateUploads(), [uploads])
+    const aggregatedUploads = useMemo(() => aggregateUploads(), [aggregateUploads])
     const handleAddPhotos = useCallback(() => addPhotos(true), [addPhotos]);
 
     return (

@@ -27,7 +27,7 @@ export function UnAuthenticated() {
             return () => { clearTimeout(t) }
         }
 
-    }, [])
+    }, [router, status, message])
 
     return (
         <div className="container pt-5 relative h-dvh">

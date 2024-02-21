@@ -38,6 +38,21 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         libraries
     })
 
+    const saveUploads = async (uploads: any) => {
+        const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace._id })
+        setUploadInProgress(false)
+        if (response) {
+            toast.success("Photos added successfully")
+            setTimeout(() => {
+                setUploads([])
+                setLocationAutoComplete(null)
+                setOpen()
+            }, 1000)
+        } else {
+            toast.error("Photos have not been added. Please try again")
+        }
+    }
+    
     useEffect(() => {
         if (uploadingInProgress) {
             let failed
@@ -47,14 +62,13 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
                     break
                 }
             }
-            console.log("FAILED", failed, uploads)
             if (failed) {
                 return
             }
             const filteredUploads = uploads.map(upload => ({ url: upload.url, metadata: upload.metadata }))
             saveUploads(filteredUploads)
         }
-    }, [uploads, uploadingInProgress])
+    }, [uploads, uploadingInProgress, saveUploads])
 
     function handleUpload(e, preventDefault?: boolean) {
         if (preventDefault) {
@@ -152,20 +166,6 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         }
     }
 
-    const saveUploads = async (uploads: any) => {
-        const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace._id })
-        setUploadInProgress(false)
-        if (response) {
-            toast.success("Photos added successfully")
-            setTimeout(() => {
-                setUploads([])
-                setLocationAutoComplete(null)
-                setOpen()
-            }, 1000)
-        } else {
-            toast.error("Photos have not been added. Please try again")
-        }
-    }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-5xl max-h-screen overflow-y-scroll">
