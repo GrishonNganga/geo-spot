@@ -1,7 +1,7 @@
 'use client'
 import { IUpload, Point } from '@/lib/types';
 import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { MarkerClusterer, Marker, GridAlgorithm } from '@googlemaps/markerclusterer';
 
 import MapPoint from './map-point';
@@ -10,19 +10,27 @@ import { photoStore } from '@/store';
 type LocationProps = { latitude: number, longitude: number }
 export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
     const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
+    const [loadingLocation, setLoadingLocation] = useState(false)
 
     useEffect(() => {
         getUserLocation()
     }, [])
+
+    useMemo(() => userLocation, [userLocation])
+
     const getUserLocation = () => {
+        setLoadingLocation(true)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     setUserLocation({ latitude, longitude });
+                    setLoadingLocation(false)
                 },
                 (error) => {
                     console.error('Error getting user location:', error);
+                    setLoadingLocation(false)
+
                 }
             );
         }
@@ -37,12 +45,20 @@ export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
         })
         return points
     }
+
+    if (loadingLocation) {
+        return (
+            <div className='w-full h-full flex justify-center items-center'>
+                Loadding...
+            </div>
+        )
+    }
     return (
         <div className="w-full h-full z-0">
             <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string}>
                 <Map
                     defaultCenter={{ lat: userLocation?.latitude || 0, lng: userLocation?.longitude || 0 }}
-                    defaultZoom={3}
+                    defaultZoom={5}
                     gestureHandling={'greedy'}
                     disableDefaultUI={true}
                     mapId={process.env.NEXT_PUBLIC_MAP_ID as string}
