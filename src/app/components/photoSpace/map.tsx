@@ -7,8 +7,9 @@ import { MarkerClusterer, Marker, GridAlgorithm } from '@googlemaps/markercluste
 import MapPoint from './map-point';
 import { photoStore } from '@/store';
 
-export default function MyMap({ uploads }: { uploads: IUpload[] | undefined }) {
-    const [userLocation, setUserLocation] = useState(null);
+type LocationProps = { latitude: number, longitude: number }
+export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
+    const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
 
     useEffect(() => {
         getUserLocation()
@@ -29,8 +30,8 @@ export default function MyMap({ uploads }: { uploads: IUpload[] | undefined }) {
 
     const getPhotosPoints = () => {
         const points: any = []
-        uploads.forEach(upload => {
-            upload.photos.forEach((photo: any) => {
+        uploads && uploads.forEach(upload => {
+            upload.photos && upload.photos.forEach((photo: any) => {
                 points.push({ url: photo.url, name: photo.metadata.location, lat: photo.metadata.latitude, lng: photo.metadata.longitude, key: `${upload._id}`, metadata: { ...(photo.metadata ? photo.metadata : {}) } })
             })
         })

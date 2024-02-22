@@ -31,4 +31,4 @@ export type IUpload = {
     photos?: { url: string, metadata: any }[]
 }
 
-export type Point = google.maps.LatLngLiteral & { key: string, url: string, metadata: object };
+export type Point = google.maps.LatLngLiteral & { key: string, url: string, metadata: { make?: string, location: string, description: string } };
