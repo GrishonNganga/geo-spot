@@ -29,7 +29,6 @@ import { getData, getLoggedInUser } from "@/lib/actions"
 import { IPhotoSpace } from "@/lib/types"
 
 export default function PhotoSpacesTable() {
-    const [data, setData] = React.useState<IPhotoSpace[]>([])
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -37,16 +36,19 @@ export default function PhotoSpacesTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-
-    React.useEffect(() => {
-        pullData()
-    }, [])
+    const [data, setData] = React.useState<IPhotoSpace[]>([])
 
     const pullData = async () => {
         const user = await getLoggedInUser()
-        const data = await getData(user._id)
-        setData(data)
+        const d = await getData(user._id)
+        console.log("D", d)
+        setData(d)
     }
+
+    React.useEffect(() => {
+        pullData()
+    }, []);
+
     const table = useReactTable({
         data,
         columns,

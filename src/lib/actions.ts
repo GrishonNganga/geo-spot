@@ -13,6 +13,7 @@ import { ObjectId } from "mongoose"
 import { storage } from "./firebase"
 import { ref, uploadBytesResumable } from "firebase/storage"
 import { createUpload } from "./database/upload"
+import { cache } from "react"
 
 export async function getSession() {
     const session = await getServerSession(authOptions)
@@ -26,10 +27,10 @@ export async function getLoggedInUser() {
     return user
 }
 
-export async function getData(userId: ObjectId) {
+export const getData = cache(async function getData(userId: ObjectId) {
     const photoSpaces = await findPhotoSpaces({ ownerId: userId })
     return JSON.parse(JSON.stringify(photoSpaces))
-}
+})
 
 export async function createPhotoSpaceAction(data: IPhotoSpace) {
     const { status, message } = await validateCreatePhotoSpace(data)

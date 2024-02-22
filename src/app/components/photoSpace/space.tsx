@@ -1,16 +1,17 @@
 import { findPhotoSpace } from "@/lib/database/photospace"
-import { getLoggedInUser, getSession } from "@/lib/actions"
+import { getLoggedInUser } from "@/lib/actions"
 import { redirect } from "next/navigation"
 
 import { IPhotoSpace } from "@/lib/types";
 import SpaceContainer from "./space-container";
+import { cache } from "react";
 
 export default async function MapHolder({ params }: {
     params: { photoSpace: string }
 }) {
     const photoSpaceId = params?.photoSpace
     const loggedInUser = await getLoggedInUser()
-    const photoSpace: IPhotoSpace = JSON.parse(JSON.stringify(await getPhotoSpaceBySpaceId(photoSpaceId)))
+    const photoSpace: IPhotoSpace = await getPhotoSpaceBySpaceId(photoSpaceId)
     if (!photoSpace) {
         return redirect('/404')
     }
@@ -38,6 +39,6 @@ export default async function MapHolder({ params }: {
 }
 
 
-const getPhotoSpaceBySpaceId = async (id: String) => {
-    return await findPhotoSpace({ spaceId: id })
-}
+const getPhotoSpaceBySpaceId = cache(async (id: String) => {
+    return await JSON.parse(JSON.stringify(findPhotoSpace({ spaceId: id })))
+})
