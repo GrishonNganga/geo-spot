@@ -10,8 +10,6 @@ import { findUser, findUsersByEmail } from "./database/users"
 import dbConnect from "./database/mongodb"
 import { createPhotoSpace, findPhotoSpaces, updatePhotoSpace } from "./database/photospace"
 import { ObjectId } from "mongoose"
-import { storage } from "./firebase"
-import { ref, uploadBytesResumable } from "firebase/storage"
 import { createUpload } from "./database/upload"
 import { cache } from "react"
 

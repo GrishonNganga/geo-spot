@@ -37,11 +37,13 @@ export default function PhotoSpacesTable() {
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
     const [data, setData] = React.useState<IPhotoSpace[]>([])
+    const [loading, setLoading] = React.useState(false)
 
     const pullData = async () => {
+        setLoading(true)
         const user = await getLoggedInUser()
         const d = await getData(user._id)
-        console.log("D", d)
+        setLoading(false)
         setData(d)
     }
 
@@ -124,7 +126,16 @@ export default function PhotoSpacesTable() {
                                     ))}
                                 </TableRow>
                             ))
-                        ) : (
+                        ) : (loading ?
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="h-24 text-center"
+                                >
+                                    Loading...
+                                </TableCell>
+                            </TableRow>
+                            :
                             <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
