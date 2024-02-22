@@ -32,7 +32,7 @@ const createOption = (label: string) => ({
     value: label,
 });
 
-export default function InvitationModal({ photoSpace, open, setOpen, setInvitations }: { open: boolean, setOpen: () => void, photoSpace: IPhotoSpace, setInvitations: (emails: String[]) => void }) {
+export default function InvitationModal({ photoSpace, open, setOpen, setInvitations }: { open: boolean, setOpen: () => void, photoSpace?: IPhotoSpace, setInvitations: (emails: String[]) => void }) {
     const [inputValue, setInputValue] = React.useState('');
     const [value, setValue] = React.useState<Option[]>([]);
 

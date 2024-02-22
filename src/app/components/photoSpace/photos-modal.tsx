@@ -24,7 +24,7 @@ import { IPhotoSpace } from "@/lib/types"
 
 const libraries = ['places'];
 
-export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: boolean, photoSpace: IPhotoSpace, setOpen: () => void }) {
+export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: boolean, photoSpace?: IPhotoSpace, setOpen: () => void }) {
     const [uploads, setUploads] = useState<any>([])
     const [locationAutoComplete, setLocationAutoComplete] = useState(null)
     const [uploadingInProgress, setUploadInProgress] = useState(false)

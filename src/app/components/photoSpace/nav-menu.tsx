@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 
 import {
     Sheet,
-    SheetClose,
     SheetContent,
     SheetDescription,
     SheetHeader,
 
 } from "@/components/ui/sheet"
-import { IPhotoSpace, IUser } from "@/lib/types";
+import { IUser } from "@/lib/types";
 import { Separator } from "@/components/ui/separator";
 import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions";
 import ContributorCard from "./contributor";
@@ -24,7 +23,7 @@ import { photoSpaceStore } from "@/store";
 export default function NavMenu() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
-    const [user, setUser] = useState()
+    const [user, setUser] = useState<IUser | undefined>()
     const [sendInvitationModalOpen, setSendInvitationModalOpen] = useState(false)
     const [addPhotosModalOpen, setAddPhotosModalOpen] = useState(false)
     const photoSpace = photoSpaceStore(state => state.photoSpace)
@@ -48,9 +47,6 @@ export default function NavMenu() {
             {
                 sidebarOpen &&
                 <Sheet open={sidebarOpen} >
-                    <SheetClose>
-
-                    </SheetClose>
                     <SheetContent onInteractOutside={() => { setSidebarOpen(prevState => !prevState) }} side={"left"}>
                         <SheetHeader>
                             <div className="flex items-center justify-between px-4 pb-2 gap-x-3 -mt-4">
@@ -94,10 +90,10 @@ export default function NavMenu() {
                                         }
                                     })
                                 }
-                                {photoSpace.ownerId._id === user?._id &&
+                                {photoSpace && photoSpace.ownerId && photoSpace.ownerId._id === user?._id &&
                                     <>
                                         {
-                                            photoSpace.invitations.length === 0 && invitations.length === 0 &&
+                                            photoSpace.invitations && photoSpace.invitations.length === 0 && invitations.length === 0 &&
                                             <div className="w-full flex flex-col items-center gap-y-5">
                                                 <div className="">No contributors invited</div>
                                                 <div>

@@ -3,7 +3,7 @@ import UploadCard from "./upload-card";
 import { Separator } from "@/components/ui/separator";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: IUpload[], owner?: IUser, user: IUser, addPhotos: (status: boolean) => void }) {
+export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: IUpload[], owner?: IUser, user?: IUser, addPhotos: (status: boolean) => void }) {
 
     const aggregatedUploads = useMemo(() => {
         const aggregateUploads = () => {
