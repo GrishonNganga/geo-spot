@@ -15,7 +15,7 @@ export default async function MapHolder({ params }: {
         return redirect('/404')
     }
     const isOwner = (userId: String) => {
-        if (photoSpace?.ownerId?._id.toString() !== userId) {
+        if (photoSpace!.ownerId!._id!.toString() !== userId) {
             return false
         }
         return true

@@ -26,7 +26,7 @@ const libraries: Libraries = ['places'];
 
 export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: boolean, photoSpace?: IPhotoSpace, setOpen: () => void }) {
     const [uploads, setUploads] = useState<any>([])
-    const [locationAutoComplete, setLocationAutoComplete] = useState(null)
+    const [locationAutoComplete, setLocationAutoComplete] = useState<any>(null)
     const [uploadingInProgress, setUploadInProgress] = useState(false)
 
     const fileInputRef = useRef<any>(null)
@@ -95,10 +95,7 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         })
     }
     const onPlaceChanged = (id: number) => {
-        console.log("IDDDD", id)
-        console.log("AA", locationAutoComplete)
         if (locationAutoComplete && locationAutoComplete[id] && locationAutoComplete[id].getPlace()) {
-            console.log("E", locationAutoComplete[id].getPlace())
             const latitude = locationAutoComplete[id]?.getPlace()?.geometry?.location?.lat()
             const longitude = locationAutoComplete[id]?.getPlace()?.geometry?.location?.lng()
             const locationName = locationAutoComplete[id]?.getPlace().formatted_address
