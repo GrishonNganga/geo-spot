@@ -22,8 +22,13 @@ export const getPhotoSpace = async (_id: ObjectId) => {
     return await photoSpace;
 }
 
-export const updatePhotoSpace = async (_id: ObjectId, data: any) => {
-    let updateObject = {};
+interface UpdateObject {
+    $addToSet?: { [key: string]: any };
+    $set?: { [key: string]: any };
+}
+
+export const updatePhotoSpace = async (_id?: ObjectId, data?: any) => {
+    let updateObject: UpdateObject = { $addToSet: {} };
     for (const key of Object.keys(data)) {
         if (Array.isArray(data[key])) {
             updateObject.$addToSet = { [key]: data[key] };

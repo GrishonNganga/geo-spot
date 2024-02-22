@@ -44,7 +44,7 @@ export async function createPhotoSpaceAction(data: IPhotoSpace) {
     if (!connect) {
         return { status: false, message: "Something wrong happened!" }
     }
-    const user = await findUser({ email: session?.user.email })
+    const user = await findUser({ email: session!.user!.email })
     if (!user) {
         return { status: false, message: "Can't create Photo Space without a Geospot account" }
     }
@@ -54,7 +54,7 @@ export async function createPhotoSpaceAction(data: IPhotoSpace) {
         if (photoSpace) {
             return { status: true, message: "Photo Space created successfully", data: JSON.parse(JSON.stringify(photoSpace)) }
         }
-    } catch (e) {
+    } catch (e: any) {
         return { status: false, message: e.message }
 
     }
@@ -72,7 +72,7 @@ export async function updatePhotoSpaceAction(id: ObjectId, data: any) {
     return JSON.parse(JSON.stringify((updated)))
 }
 
-export async function createUploadAction(data: IUpload | IUpload[]) {
+export async function createUploadAction(data: IUpload) {
     const user = await getLoggedInUser()
     const uploads = await createUpload({ ...data, userId: user._id })
     const updated = await updatePhotoSpace(data.photoSpaceId, { uploads: [uploads._id] })

@@ -77,7 +77,7 @@ export default function Page() {
                 </CardContent>
                 <div className="flex justify-end p-3 gap-x-3">
                     <div>
-                        <Button onClick={handleSubmit}>
+                        <Button>
                             Create
                         </Button>
                     </div>

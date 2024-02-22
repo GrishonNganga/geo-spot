@@ -3,12 +3,12 @@ import UploadCard from "./upload-card";
 import { Separator } from "@/components/ui/separator";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: IUpload[], owner?: IUser, user?: IUser, addPhotos: (status: boolean) => void }) {
+export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: any, owner?: IUser, user?: IUser, addPhotos: (status: boolean) => void }) {
 
     const aggregatedUploads = useMemo(() => {
         const aggregateUploads = () => {
-            const groupedUploads = uploads.reduce((acc, curr) => {
-                const userId = curr.userId._id;
+            const groupedUploads = uploads.reduce((acc: any, curr: any) => {
+                const userId = curr!.userId!._id!;
                 if (acc[userId]) {
                     acc[userId].photos.push(...(curr.photos ? curr.photos : []));
                 } else {
@@ -41,7 +41,7 @@ export default function Uploads({ uploads, owner, user, addPhotos }: { uploads: 
                 aggregatedUploads.map((upload: IUpload, idx: number) => {
                     return (
                         <div key={idx}>
-                            <UploadCard uploadId={upload._id} name={`${upload?.userId?.name} ${upload.userId._id === user?._id ? "(me)" : ""}`} photos={upload.photos?.map(p => p.url) || []} showAddPhotosButton={user?._id === upload.userId._id} addPhotos={handleAddPhotos} />
+                            <UploadCard uploadId={upload._id} name={`${upload?.userId?.name} ${upload!.userId!._id === user?._id ? "(me)" : ""}`} photos={upload.photos?.map(p => p.url) || []} showAddPhotosButton={user?._id === upload!.userId!._id} addPhotos={handleAddPhotos} />
                             <Separator />
                         </div>
                     )

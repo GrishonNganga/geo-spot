@@ -23,8 +23,13 @@ export const getUpload = async (_id: ObjectId) => {
     return await upload;
 }
 
+interface UpdateObject {
+    $addToSet?: { [key: string]: any };
+    $set?: { [key: string]: any };
+}
+
 export const updateUpload = async (_id: ObjectId, data: any) => {
-    let updateObject = {};
+    let updateObject: UpdateObject = { $addToSet: {} };
     for (const key of Object.keys(data)) {
         if (Array.isArray(data[key])) {
             updateObject.$addToSet = { [key]: data[key] };

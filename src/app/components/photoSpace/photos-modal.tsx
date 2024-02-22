@@ -67,7 +67,7 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
             const filteredUploads = uploads.map((upload: IPhoto) => ({ url: upload.url, metadata: upload.metadata }))
             saveUploads(filteredUploads)
         }
-    }, [uploads, uploadingInProgress, photoSpace?._id, setOpen])
+    }, [uploads, uploadingInProgress, photoSpace, photoSpace?._id, setOpen])
 
     function handleUpload(e: any, preventDefault?: boolean) {
         if (preventDefault) {
