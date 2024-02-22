@@ -43,7 +43,6 @@ export default function NavMenu() {
 
         pullUsers()
     }, [photoSpace?.invitations])
-
     return (
         <div>
             {
@@ -73,7 +72,7 @@ export default function NavMenu() {
                             <SheetDescription>
                                 Uploads
                             </SheetDescription>
-                            <Uploads uploads={photoSpace.uploads || []} owner={photoSpace.ownerId} user={user} addPhotos={(status: boolean) => { setAddPhotosModalOpen(status) }} />
+                            <Uploads uploads={photoSpace!.uploads || []} owner={photoSpace!.ownerId} user={user} addPhotos={(status: boolean) => { setAddPhotosModalOpen(status) }} />
                             <SheetDescription>
                                 Contributors
                             </SheetDescription>

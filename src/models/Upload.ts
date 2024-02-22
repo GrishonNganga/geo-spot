@@ -1,3 +1,4 @@
+import { IUpload } from '@/lib/types';
 import mongoose from 'mongoose';
 
 const PhotoSchema = new mongoose.Schema({
@@ -17,4 +18,4 @@ const uploadSchema = new mongoose.Schema({
     photos: [PhotoSchema]
 }, { timestamps: true });
 
-export default mongoose.models.Upload || mongoose.model('Upload', uploadSchema);
+export default mongoose.models.Upload || mongoose.model<IUpload>('Upload', uploadSchema);

@@ -1,3 +1,4 @@
+import { IPhotoSpace } from '@/lib/types';
 import mongoose from 'mongoose';
 
 const photoSpaceSchema = new mongoose.Schema({
@@ -12,4 +13,4 @@ const photoSpaceSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-export default mongoose.models.PhotoSpace || mongoose.model('PhotoSpace', photoSpaceSchema);
+export default mongoose.models.PhotoSpace || mongoose.model<IPhotoSpace>('PhotoSpace', photoSpaceSchema);

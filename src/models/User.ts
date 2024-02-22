@@ -1,3 +1,4 @@
+import { IUser } from '@/lib/types';
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
@@ -7,4 +8,4 @@ const userSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-export default mongoose.models.User || mongoose.model('User', userSchema);
+export default mongoose.models.User || mongoose.model<IUser>('User', userSchema);
