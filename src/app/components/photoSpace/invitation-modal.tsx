@@ -99,7 +99,7 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
                         Invite friends to add photos to your photospace
                     </DialogDescription>
                 </DialogHeader>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-y-4">
                         <div className=" gap-x-2 items-center">
                             <Label htmlFor="name" className="text-right">
@@ -120,7 +120,7 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
                                 isClearable
                                 isMulti
                                 menuIsOpen={false}
-                                onChange={(newValue) => setValue(newValue)}
+                                // onChange={(newValue) => setValue(newValue)}
                                 onInputChange={(newValue) => setInputValue(newValue)}
                                 onKeyDown={handleKeyDown}
                                 placeholder="Add Emails..."
@@ -129,7 +129,7 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
                         </div>
                     </div>
                     <DialogFooter className="mt-5">
-                        <Button type="submit" onClick={handleSubmit}>Invite</Button>
+                        <Button type="submit">Invite</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>
