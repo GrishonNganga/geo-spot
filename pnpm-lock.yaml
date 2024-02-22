@@ -112,6 +112,9 @@ dependencies:
     version: 4.5.1(@types/react@18.2.55)(react@18.2.0)
 
 devDependencies:
+  '@types/google.maps':
+    specifier: ^3.55.3
+    version: 3.55.3
   '@types/node':
     specifier: ^20
     version: 20.11.17
@@ -1892,7 +1895,6 @@ packages:
 
   /@types/google.maps@3.55.3:
     resolution: {integrity: sha512-UF1nfj8h/Vj4wEcdjv5v314HkDB6AWaN34Fr/u+6Oaj+GSRlG+k4c3DnJNKv7S23RvDdvIPt4ON6ONJpzNnarA==}
-    dev: false
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}

@@ -49,7 +49,7 @@ export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
     if (loadingLocation) {
         return (
             <div className='w-full h-full flex justify-center items-center'>
-                Loadding...
+                Loading...
             </div>
         )
     }
@@ -125,7 +125,7 @@ const Markers = ({ points }: Props) => {
                         className='cursor-pointer'
                         onClick={() => setOpen(`${point.key},${idx}`)}
                         ref={marker => setMarkerRef(marker, point.key)}>
-                        <MapPoint point={point} open={`${point.key},${idx}` === open} setOpen={() => { setOpen(null) }} />
+                        <MapPoint point={point} open={`${point.key},${idx}` === open} setOpen={() => { setOpen(undefined) }} />
                     </AdvancedMarker>
                 </>
             ))}

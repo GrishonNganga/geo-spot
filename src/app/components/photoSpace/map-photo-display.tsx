@@ -18,7 +18,7 @@ export default function MapPhotoDisplay({ point }: { point: Point }) {
                         <div>
                             {point.metadata?.description || ""}
                         </div>
-                        <Image src={point.url} alt="Photo" width={500} height={500} className='w-full object-cover' />
+                        <Image src={point.url as string} alt="Photo" width={500} height={500} className='w-full object-cover' />
                     </div>
                 </InfoWindow>
             }

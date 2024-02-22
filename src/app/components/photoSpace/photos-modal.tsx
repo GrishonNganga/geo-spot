@@ -8,28 +8,28 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { FileIcon, TrashIcon, XIcon } from "lucide-react"
+import { FileIcon, TrashIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import exifr from 'exifr'
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { Autocomplete, useJsApiLoader } from "@react-google-maps/api"
+import { Autocomplete, Libraries, useJsApiLoader } from "@react-google-maps/api"
 import { toast } from "sonner"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { storage } from "@/lib/firebase"
 import { createUploadAction } from "@/lib/actions"
-import { IPhotoSpace } from "@/lib/types"
+import { IPhoto, IPhotoSpace } from "@/lib/types"
 
-const libraries = ['places'];
+const libraries: Libraries = ['places'];
 
 export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: boolean, photoSpace?: IPhotoSpace, setOpen: () => void }) {
     const [uploads, setUploads] = useState<any>([])
     const [locationAutoComplete, setLocationAutoComplete] = useState(null)
     const [uploadingInProgress, setUploadInProgress] = useState(false)
 
-    const fileInputRef = useRef(null)
+    const fileInputRef = useRef<any>(null)
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
@@ -39,7 +39,7 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
     useEffect(() => {
 
         const saveUploads = async (uploads: any) => {
-            const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace._id })
+            const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace!._id })
             setUploadInProgress(false)
             if (response) {
                 toast.success("Photos added successfully")
@@ -64,12 +64,12 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
             if (failed) {
                 return
             }
-            const filteredUploads = uploads.map(upload => ({ url: upload.url, metadata: upload.metadata }))
+            const filteredUploads = uploads.map((upload: IPhoto) => ({ url: upload.url, metadata: upload.metadata }))
             saveUploads(filteredUploads)
         }
     }, [uploads, uploadingInProgress, photoSpace?._id, setOpen])
 
-    function handleUpload(e, preventDefault?: boolean) {
+    function handleUpload(e: any, preventDefault?: boolean) {
         if (preventDefault) {
             e.preventDefault()
         }
@@ -87,7 +87,7 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
 
                 const d = reader.onload = (e) => {
                     if (!e) { return }
-                    fileObj.preview = e.target.result
+                    fileObj.preview = e.target!.result
                     fileObj.metadata = output
                     setUploads((prevState: any) => ([...prevState, fileObj]))
                 }
@@ -188,7 +188,7 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
                                 <div>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
                                         Drag and drop your files here or &nbsp;
-                                        <Button size="sm" variant="outline" onClick={() => { fileInputRef.current.click() }}>
+                                        <Button size="sm" variant="outline" onClick={() => { fileInputRef.current!.click() }}>
                                             Browse
                                         </Button>
                                         <input
