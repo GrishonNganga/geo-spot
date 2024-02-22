@@ -40,5 +40,5 @@ export default async function MapHolder({ params }: {
 
 
 const getPhotoSpaceBySpaceId = cache(async (id: String) => {
-    return await JSON.parse(JSON.stringify(findPhotoSpace({ spaceId: id })))
+    return JSON.parse(JSON.stringify(await findPhotoSpace({ spaceId: id })))
 })

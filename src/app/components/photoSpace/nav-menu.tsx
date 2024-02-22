@@ -27,7 +27,7 @@ export default function NavMenu() {
     const [sendInvitationModalOpen, setSendInvitationModalOpen] = useState(false)
     const [addPhotosModalOpen, setAddPhotosModalOpen] = useState(false)
     const photoSpace = photoSpaceStore(state => state.photoSpace)
-
+    console.log("P", photoSpace)
     useEffect(() => {
 
         const pullUsers = async () => {
@@ -41,7 +41,7 @@ export default function NavMenu() {
         }
 
         pullUsers()
-    }, [photoSpace?.invitations])
+    }, [photoSpace])
     return (
         <div>
             {
