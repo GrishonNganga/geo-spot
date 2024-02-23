@@ -16,14 +16,20 @@ export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
         getUserLocation()
     }, [])
 
-    useMemo(() => userLocation, [userLocation])
-
     const getUserLocation = () => {
         setLoadingLocation(true)
+        const location = window.localStorage.getItem('user-location')
+        if (location) {
+            console.log("This is used")
+            setUserLocation(JSON.parse(location));
+            setLoadingLocation(false)
+            return
+        }
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
+                    window.localStorage.setItem('user-location', JSON.stringify({ latitude, longitude }))
                     setUserLocation({ latitude, longitude });
                     setLoadingLocation(false)
                 },
