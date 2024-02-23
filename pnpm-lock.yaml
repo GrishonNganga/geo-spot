@@ -89,6 +89,9 @@ dependencies:
   react-dom:
     specifier: ^18
     version: 18.2.0(react@18.2.0)
+  react-google-places-autocomplete:
+    specifier: ^4.0.1
+    version: 4.0.1(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
   react-select:
     specifier: ^5.8.0
     version: 5.8.0(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
@@ -4191,6 +4194,22 @@ packages:
       scheduler: 0.23.0
     dev: false
 
+  /react-google-places-autocomplete@4.0.1(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-BA/+8eky8pvnXjuBiqcPS6CdwPOEM38hjUkh+iOE6D/ctrQVTTFdm5ylQyWOGOD+1LeuB/INE8SwIp/Gre0A9A==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@googlemaps/js-api-loader': 1.16.2
+      '@types/google.maps': 3.55.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-select: 5.8.0(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
+      use-debounce: 3.4.3(react@18.2.0)
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
+
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -4844,6 +4863,14 @@ packages:
       '@types/react': 18.2.55
       react: 18.2.0
       tslib: 2.6.2
+    dev: false
+
+  /use-debounce@3.4.3(react@18.2.0):
+    resolution: {integrity: sha512-nxy+opOxDccWfhMl36J5BSCTpvcj89iaQk2OZWLAtBJQj7ISCtx1gh+rFbdjGfMl6vtCZf6gke/kYvrkVfHMoA==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /use-isomorphic-layout-effect@1.1.2(@types/react@18.2.55)(react@18.2.0):

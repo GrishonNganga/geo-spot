@@ -20,7 +20,6 @@ export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
         setLoadingLocation(true)
         const location = window.localStorage.getItem('user-location')
         if (location) {
-            console.log("This is used")
             setUserLocation(JSON.parse(location));
             setLoadingLocation(false)
             return

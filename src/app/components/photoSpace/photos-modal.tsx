@@ -22,6 +22,9 @@ import { storage } from "@/lib/firebase"
 import { createUploadAction } from "@/lib/actions"
 import { IPhoto, IPhotoSpace } from "@/lib/types"
 
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { geocodeByPlaceId } from 'react-google-places-autocomplete';
+
 const libraries: Libraries = ['places'];
 
 export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: boolean, photoSpace?: IPhotoSpace, setOpen: () => void }) {
@@ -94,21 +97,28 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
             };
         })
     }
-    const onPlaceChanged = (id: number) => {
-        if (locationAutoComplete && locationAutoComplete[id] && locationAutoComplete[id].getPlace()) {
-            const latitude = locationAutoComplete[id]?.getPlace()?.geometry?.location?.lat()
-            const longitude = locationAutoComplete[id]?.getPlace()?.geometry?.location?.lng()
-            const locationName = locationAutoComplete[id]?.getPlace().formatted_address
-            setUploads((prevState: any) => {
-                prevState[id].metadata = {
-                    ...(prevState[id]?.metadata ? prevState[id]?.metadata : {}),
-                    location: locationName,
-                    latitude,
-                    longitude
-                }
-                return [...prevState]
-            })
+    const onPlaceChanged = (id: number, e: any) => {
+        console.log("EEEE", e)
+        if (e) {
+            const placeId = e.value.place_id
+            geocodeByPlaceId(placeId)
+                .then(results => {
+                    const latitude = results[0]?.geometry?.location?.lat()
+                    const longitude = results[0]?.geometry?.location?.lng()
+                    const locationName = results[0].formatted_address
+                    setUploads((prevState: any) => {
+                        prevState[id].metadata = {
+                            ...(prevState[id]?.metadata ? prevState[id]?.metadata : {}),
+                            location: locationName,
+                            latitude,
+                            longitude
+                        }
+                        return [...prevState]
+                    })
+                })
+                .catch(error => console.error(error));
         }
+
     }
 
     const onLoad = (autocomplete: any, idx: number) => {
@@ -119,7 +129,6 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
     const uploadFileToFirebase = (file: any) => {
         const storageRef = ref(storage, `/files/images/${file.name}_${new Date().getTime()}`)
         const resp = uploadBytesResumable(storageRef, file)
-        console.log("RES", resp)
         return resp
     }
     const handleSubmit = async () => {
@@ -135,15 +144,12 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         setUploadInProgress(true)
         for (const [index, photo] of uploads.entries()) {
             const uploadTask = uploadFileToFirebase(photo.file);
-            console.log("T", uploadTask)
             uploadTask.on(
                 "state_changed",
                 (snapshot) => {
-                    console.log("SS", snapshot.totalBytes)
                     const prog = snapshot.totalBytes === 0 ? 0 : Math.round(
                         (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                     );
-                    console.log("PR", prog)
                     setUploads((prevState: any) => {
                         prevState[index] = { ...prevState[index], uploadStatus: true, uploadProgress: prog }
                         return [...prevState]
@@ -219,20 +225,48 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
                                                     </div> */}
 
                                                 </div>
-                                                <div className="">
+                                                <div className="grow-0 flex-none">
                                                     {
-                                                        isLoaded &&
-                                                        <div className="mb-3">
+                                                        <div className="mb-3 grow-0 flex-none">
                                                             <Label htmlFor="">
                                                                 Search for Location
                                                             </Label>
-                                                            <Autocomplete
-                                                                onPlaceChanged={() => { onPlaceChanged(idx) }}
-                                                                onLoad={(e) => { onLoad(e, idx) }}
-                                                                className="z-100"
-                                                            >
-                                                                <Input name={`newCoordinate-${idx}`} placeholder="Search for location" />
-                                                            </Autocomplete>
+                                                            <GooglePlacesAutocomplete
+                                                                selectProps={{
+                                                                    value: upload?.location,
+                                                                    onChange: (e) => { onPlaceChanged(idx, e) },
+                                                                    styles: {
+                                                                        control: (provided) => ({
+                                                                            ...provided,
+                                                                            borderRadius: 14,
+                                                                            // borderColor: provided.isFocused ? 'hotpink' : "green", // Set border color when focused
+                                                                            '&:hover': {
+                                                                                borderColor: 'hotpink', // Set border color on hover
+                                                                            },
+                                                                            boxShadow: provided.isFocused ? 'green' : 'red', // Add focus ring when focused
+                                                                            maxWidth: '200px'
+                                                                        }),
+                                                                        input: (provided) => ({
+                                                                            ...provided,
+                                                                            color: 'black',
+                                                                            borderColor: 'hotpink',
+                                                                            borderRadius: 16
+                                                                        }),
+                                                                        option: (provided) => ({
+                                                                            ...provided,
+                                                                            color: 'black',
+                                                                            borderRadius: 16
+                                                                        }),
+                                                                        singleValue: (provided) => ({
+                                                                            ...provided,
+                                                                            color: 'black',
+                                                                            borderRadius: 16
+                                                                        }),
+                                                                    },
+                                                                }}
+                                                                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string}
+                                                                apiOptions={{ libraries: ["places"] }}
+                                                            />
                                                         </div>
                                                     }
                                                     <Input name={`oldCoordinate-${idx}`} disabled value={`${upload?.metadata?.longitude || 0},${upload?.metadata?.latitude || 0}`} />
@@ -253,6 +287,6 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
                     <Button type="submit" disabled={uploadingInProgress} onClick={handleSubmit}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }
