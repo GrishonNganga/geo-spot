@@ -36,27 +36,36 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
     const [inputValue, setInputValue] = React.useState('');
     const [value, setValue] = React.useState<Option[]>([]);
 
+    const handleChange = (val: any) => {
+        console.log("VA", val)
+        setValue(val);
+    }
+
+    const handleInput = async (handleInput: string) => {
+        const { status, message } = await validateEmail(inputValue)
+        if (!status) {
+            toast.error("", {
+                description: message,
+            })
+            return
+        }
+        const exists = value.find(op => op.value === inputValue)
+        if (exists) {
+            toast.error("", {
+                description: "Email already added",
+            })
+            return
+        }
+        setValue(prevState => [...prevState, createOption(inputValue)])
+        setInputValue('');
+    }
+
     const handleKeyDown: KeyboardEventHandler = async (event) => {
         if (!inputValue) return;
         switch (event.key) {
             case 'Enter':
             case 'Tab':
-                const { status, message } = await validateEmail(inputValue)
-                if (!status) {
-                    toast.error("", {
-                        description: message,
-                    })
-                    return
-                }
-                const exists = value.find(op => op.value === inputValue)
-                if (exists) {
-                    toast.error("", {
-                        description: "Email already added",
-                    })
-                    return
-                }
-                setValue(prevState => [...prevState, createOption(inputValue)])
-                setInputValue('');
+                handleInput(inputValue)
                 event.preventDefault();
         }
     };
@@ -120,7 +129,8 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
                                 isClearable
                                 isMulti
                                 menuIsOpen={false}
-                                // onChange={(newValue) => setValue(newValue)}
+                                onChange={handleChange}
+                                onBlur={() => handleInput(inputValue)}
                                 onInputChange={(newValue) => setInputValue(newValue)}
                                 onKeyDown={handleKeyDown}
                                 placeholder="Add Emails..."
