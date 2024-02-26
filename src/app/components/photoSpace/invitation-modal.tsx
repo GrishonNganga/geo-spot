@@ -35,7 +35,7 @@ const createOption = (label: string) => ({
 export default function InvitationModal({ photoSpace, open, setOpen, setInvitations }: { open: boolean, setOpen: () => void, photoSpace?: IPhotoSpace, setInvitations: (emails: String[]) => void }) {
     const [inputValue, setInputValue] = React.useState('');
     const [value, setValue] = React.useState<Option[]>([]);
-
+    const [loading, setLoading] = React.useState(false)
     const handleChange = (val: any) => {
         setValue(val);
     }
@@ -82,7 +82,9 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
         if (!photoSpace) {
             return
         }
+        setLoading(true)
         const updatedPhotoSpace = await updatePhotoSpaceAction(photoSpace._id!, { invitations: emails })
+        setLoading(false)
         if (updatedPhotoSpace) {
             const inv = await getPopulatedInvitations(updatedPhotoSpace.invitations)
             setInvitations(inv)
@@ -139,7 +141,7 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
                         </div>
                     </div>
                     <DialogFooter className="mt-5">
-                        <Button type="submit">Invite</Button>
+                        <Button type="submit" disabled={loading}>Invite</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>
