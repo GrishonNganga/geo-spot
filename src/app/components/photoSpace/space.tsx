@@ -12,6 +12,7 @@ export default async function MapHolder({ params }: {
     const photoSpaceId = params?.photoSpace
     const loggedInUser = await getLoggedInUser()
     const photoSpace: IPhotoSpace = await getPhotoSpaceBySpaceId(photoSpaceId)
+    console.log("PS", photoSpace)
     if (!photoSpace) {
         return redirect('/404')
     }

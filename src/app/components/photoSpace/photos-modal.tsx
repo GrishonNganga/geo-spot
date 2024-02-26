@@ -24,14 +24,19 @@ import { IPhoto, IPhotoSpace } from "@/lib/types"
 
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByPlaceId } from 'react-google-places-autocomplete';
+import { photoSpaceStore } from "@/store"
+import { useRouter } from "next/navigation"
 
 const libraries: Libraries = ['places'];
 
-export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: boolean, photoSpace?: IPhotoSpace, setOpen: () => void }) {
+export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOpen: () => void }) {
     const [uploads, setUploads] = useState<any>([])
-    const [locationAutoComplete, setLocationAutoComplete] = useState<any>(null)
     const [uploadingInProgress, setUploadInProgress] = useState(false)
 
+    const photoSpace = photoSpaceStore(state => state.photoSpace)
+    const setPhotoSpace = photoSpaceStore(state => state.setPhotoSpace)
+
+    const router = useRouter()
     const fileInputRef = useRef<any>(null)
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -40,15 +45,17 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
     })
 
     useEffect(() => {
-
         const saveUploads = async (uploads: any) => {
             const response = await createUploadAction({ photos: uploads, photoSpaceId: photoSpace!._id })
             setUploadInProgress(false)
             if (response) {
                 toast.success("Photos added successfully")
+                const newPhotoSpace = photoSpace
+                newPhotoSpace!.uploads = (photoSpace?.uploads ? [...photoSpace.uploads, response] : [response])
+                setPhotoSpace(newPhotoSpace)
+                router.refresh()
                 setTimeout(() => {
                     setUploads([])
-                    setLocationAutoComplete(null)
                     setOpen()
                 }, 1000)
             } else {
@@ -98,7 +105,6 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         })
     }
     const onPlaceChanged = (id: number, e: any) => {
-        console.log("EEEE", e)
         if (e) {
             const placeId = e.value.place_id
             geocodeByPlaceId(placeId)
@@ -120,11 +126,6 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
         }
 
     }
-
-    const onLoad = (autocomplete: any, idx: number) => {
-        setLocationAutoComplete((prevState: any) => ({ ...(prevState ? prevState : {}), [idx]: autocomplete }))
-    }
-
 
     const uploadFileToFirebase = (file: any) => {
         const storageRef = ref(storage, `/files/images/${file.name}_${new Date().getTime()}`)
@@ -218,12 +219,6 @@ export default function AddPhotosModal({ open, setOpen, photoSpace }: { open: bo
                                             <li key={idx} className="flex items-center space-x-2 p-3 items-center">
                                                 <div className="relative w-40 h-40 ">
                                                     <Image className="absolute w-full h-full object-cover rounded-lg" src={upload.uploadStatus ? "/loading.gif" : upload.preview} width={100} height={100} alt={"Uploaded file"} />
-                                                    {/* <div className="absolute w-full h-full flex justify-center items-center bg-gray-100 rounded-lg opacity-60">
-                                                    </div>
-                                                    <div className="absolute w-full h-full flex justify-center items-center rounded-lg">
-                                                        <CircularProgress progress={upload.uploadProgress} />
-                                                    </div> */}
-
                                                 </div>
                                                 <div className="grow-0 flex-none">
                                                     {

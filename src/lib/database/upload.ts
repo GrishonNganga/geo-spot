@@ -4,8 +4,9 @@ import PhotoSpace from "@/models/PhotoSpace";
 import Upload from "@/models/Upload";
 
 export const createUpload = async (data: IUpload | IUpload[]) => {
-    const uploads = new Upload(data);
-    return await uploads.save();
+    let uploads = await Upload.create(data)
+    uploads = await uploads.populate('userId')
+    return uploads;
 }
 
 export const findUpload = async (data: any) => {

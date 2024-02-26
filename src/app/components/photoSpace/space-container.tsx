@@ -6,11 +6,13 @@ import { useEffect } from "react";
 
 export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace }) {
     const setPhotoSpace = photoSpaceStore(state => state.setPhotoSpace)
+    const ps = photoSpaceStore(state => state.photoSpace)
+
     useEffect(() => {
         setPhotoSpace(photoSpace)
     }, [photoSpace, setPhotoSpace])
 
     return (
-        <Map uploads={photoSpace.uploads} />
+        <Map uploads={ps?.uploads} />
     )
 }

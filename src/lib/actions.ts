@@ -71,7 +71,7 @@ export async function updatePhotoSpaceAction(id: ObjectId, data: any) {
     return JSON.parse(JSON.stringify((updated)))
 }
 
-export async function createUploadAction(data: IUpload) {
+export async function createUploadAction(data: IUpload): Promise<IUpload> {
     const user = await getLoggedInUser()
     const uploads = await createUpload({ ...data, userId: user._id })
     const updated = await updatePhotoSpace(data.photoSpaceId, { uploads: [uploads._id] })

@@ -137,7 +137,7 @@ export default function NavMenu() {
                 </div>
             }
             <InvitationModal open={sendInvitationModal} setOpen={() => { setSendInvitationModal(!sendInvitationModal) }} photoSpace={photoSpace} setInvitations={(inv: String[]) => { setInvitations(inv) }} />
-            <AddPhotosModal open={addPhotosModal} setOpen={() => { setAddPhotosModal(!addPhotosModal) }} photoSpace={photoSpace} />
+            <AddPhotosModal open={addPhotosModal} setOpen={() => { setAddPhotosModal(!addPhotosModal) }} />
         </div >
     )
 }
