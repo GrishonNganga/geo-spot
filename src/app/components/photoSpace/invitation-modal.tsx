@@ -37,11 +37,11 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
     const [value, setValue] = React.useState<Option[]>([]);
 
     const handleChange = (val: any) => {
-        console.log("VA", val)
         setValue(val);
     }
 
     const handleInput = async (handleInput: string) => {
+        if (!inputValue) return
         const { status, message } = await validateEmail(inputValue)
         if (!status) {
             toast.error("", {

@@ -20,3 +20,18 @@ export const photoSpaceStore = create<PhotoSpaceStore>()((set) => ({
     photoSpace: undefined,
     setPhotoSpace: (newState: IPhotoSpace | undefined) => set(() => ({ photoSpace: newState })),
 }))
+
+type ModalsStore = {
+    sendInvitationModal: boolean
+    setSendInvitationModal: (newState: boolean) => void
+    addPhotosModal: boolean
+    setAddPhotosModal: (newState: boolean) => void
+}
+
+export const modalsStore = create<ModalsStore>()((set) => ({
+    sendInvitationModal: false,
+    addPhotosModal: false,
+    setSendInvitationModal: (newState: boolean) => set(() => ({ sendInvitationModal: newState })),
+    setAddPhotosModal: (newState: boolean) => set(() => ({ addPhotosModal: newState })),
+
+}))

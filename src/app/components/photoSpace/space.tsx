@@ -29,7 +29,6 @@ export default async function MapHolder({ params }: {
     }
 
     if (!hasAccess(loggedInUser?._id?.toString()) && !isOwner(loggedInUser?._id?.toString())) {
-        // TODO: Work on hasAccess() check once that feature is done.
         return redirect('/403')
     }
 

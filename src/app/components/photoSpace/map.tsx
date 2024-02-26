@@ -2,16 +2,27 @@
 import { IUpload, Point } from '@/lib/types';
 import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { MarkerClusterer, Marker, GridAlgorithm } from '@googlemaps/markerclusterer';
+import { MarkerClusterer, Marker } from '@googlemaps/markerclusterer';
 
 import MapPoint from './map-point';
-import { photoStore } from '@/store';
+import { modalsStore, photoStore } from '@/store';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+import { ImagePlusIcon, PlusIcon, UserPlus2Icon } from 'lucide-react';
 
 type LocationProps = { latitude: number, longitude: number }
 export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
     const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false)
 
+    const setAddPhotosModal = modalsStore(state => state.setAddPhotosModal)
+    const setSendInvitationModal = modalsStore(state => state.setSendInvitationModal)
     useEffect(() => {
         getUserLocation()
     }, [])
@@ -59,7 +70,7 @@ export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
         )
     }
     return (
-        <div className="w-full h-full z-0">
+        <div className="w-full h-full z-0 relative">
             <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string}>
                 <Map
                     defaultCenter={{ lat: userLocation?.latitude || 0, lng: userLocation?.longitude || 0 }}
@@ -71,6 +82,36 @@ export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
                     <Markers points={getPhotosPoints()} />
                 </Map>
             </APIProvider>
+            <div className='absolute bottom-0 right-0 p-10 lg:p-20 flex flex-col gap-y-3 justify-center items-center'>
+                <div>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Avatar className='shadow-md' onClick={() => { setAddPhotosModal(true) }}>
+                                    <AvatarFallback><ImagePlusIcon /></AvatarFallback>
+                                </Avatar>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Add photos</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+                <div>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Avatar className='shadow-md' onClick={() => { setSendInvitationModal(true) }}>
+                                    <AvatarFallback><UserPlus2Icon /></AvatarFallback>
+                                </Avatar>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Invite contributor</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+            </div>
         </div>
     )
 };

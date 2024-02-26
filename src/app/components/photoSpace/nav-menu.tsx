@@ -18,21 +18,24 @@ import Link from "next/link";
 import InvitationModal from "./invitation-modal";
 import AddPhotosModal from "./photos-modal";
 import Uploads from "./uploads";
-import { photoSpaceStore } from "@/store";
+import { modalsStore, photoSpaceStore } from "@/store";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function NavMenu() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const [invitations, setInvitations] = useState<any>()
     const [user, setUser] = useState<IUser | undefined>()
-    const [sendInvitationModalOpen, setSendInvitationModalOpen] = useState(false)
-    const [addPhotosModalOpen, setAddPhotosModalOpen] = useState(false)
     const photoSpace = photoSpaceStore(state => state.photoSpace)
-    console.log("P", photoSpace)
+    const sendInvitationModal = modalsStore(state => state.sendInvitationModal)
+    const addPhotosModal = modalsStore(state => state.addPhotosModal)
+    const setSendInvitationModal = modalsStore(state => state.setSendInvitationModal)
+    const setAddPhotosModal = modalsStore(state => state.setAddPhotosModal)
+
     useEffect(() => {
 
         const pullUsers = async () => {
             if (photoSpace?.invitations) {
-                let populatedInvitations
                 const inv = await getPopulatedInvitations(photoSpace.invitations)
                 const user = await getLoggedInUser()
                 setInvitations(inv)
@@ -68,7 +71,7 @@ export default function NavMenu() {
                             <SheetDescription>
                                 Uploads
                             </SheetDescription>
-                            <Uploads uploads={photoSpace!.uploads || []} owner={photoSpace!.ownerId} user={user} addPhotos={(status: boolean) => { setAddPhotosModalOpen(status) }} />
+                            <Uploads uploads={photoSpace!.uploads || []} owner={photoSpace!.ownerId} user={user} addPhotos={(status: boolean) => { setAddPhotosModal(status) }} />
                             <SheetDescription>
                                 Contributors
                             </SheetDescription>
@@ -97,13 +100,13 @@ export default function NavMenu() {
                                             <div className="w-full flex flex-col items-center gap-y-5">
                                                 <div className="">No contributors invited</div>
                                                 <div>
-                                                    <Button variant={"outline"} onClick={() => { setSendInvitationModalOpen(true) }}>
+                                                    <Button variant={"outline"} onClick={() => { setSendInvitationModal(true) }}>
                                                         Invite
                                                     </Button>
                                                 </div>
                                             </div>
                                             ||
-                                            <Button size={"sm"} variant={"ghost"} onClick={() => { setSendInvitationModalOpen(true) }}>
+                                            <Button size={"sm"} variant={"ghost"} onClick={() => { setSendInvitationModal(true) }}>
                                                 <PlusIcon className="w-5 h-5" />
                                             </Button>
                                         }
@@ -115,11 +118,26 @@ export default function NavMenu() {
                 </Sheet>
                 ||
                 <div onClick={() => { setSidebarOpen(prevState => !prevState) }}>
-                    <MenuIcon />
+                    <div>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Avatar className='shadow-md'>
+                                        <AvatarFallback>
+                                            <MenuIcon />
+                                        </AvatarFallback>
+                                    </Avatar>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Open menu</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
                 </div>
             }
-            <InvitationModal open={sendInvitationModalOpen} setOpen={() => { setSendInvitationModalOpen(!sendInvitationModalOpen) }} photoSpace={photoSpace} setInvitations={(inv: String[]) => { setInvitations(inv) }} />
-            <AddPhotosModal open={addPhotosModalOpen} setOpen={() => { setAddPhotosModalOpen(!addPhotosModalOpen) }} photoSpace={photoSpace} />
+            <InvitationModal open={sendInvitationModal} setOpen={() => { setSendInvitationModal(!sendInvitationModal) }} photoSpace={photoSpace} setInvitations={(inv: String[]) => { setInvitations(inv) }} />
+            <AddPhotosModal open={addPhotosModal} setOpen={() => { setAddPhotosModal(!addPhotosModal) }} photoSpace={photoSpace} />
         </div >
     )
 }
