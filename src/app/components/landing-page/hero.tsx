@@ -25,11 +25,11 @@ export default async function Hero() {
                         <div className="flex lg:justify-center pt-5 lg:pt-10">
                             {
                                 session &&
-                                <Button>
-                                    <Link href={"/dashboard"}>
+                                <Link href={"/dashboard"}>
+                                    <Button>
                                         View Dashboard
-                                    </Link>
-                                </Button>
+                                    </Button>
+                                </Link>
                                 ||
                                 <Button>
                                     <Link href={"/signup"}>

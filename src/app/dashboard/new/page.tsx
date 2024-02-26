@@ -17,11 +17,13 @@ export default function Page() {
         name: "",
         access: false,
     })
+    const [loading, setLoading] = useState(false)
+
     const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        setLoading(true)
         e.preventDefault()
-        console.log("p", photoSpaceDetails)
         const { status, message } = await validateCreatePhotoSpace(photoSpaceDetails)
 
         if (!status) {
@@ -31,6 +33,7 @@ export default function Page() {
             return
         }
         const response = await createPhotoSpaceAction(photoSpaceDetails)
+        setLoading(false)
         if (!response.status) {
             toast.error("Error creating Photospace", {
                 description: response.message,
@@ -42,7 +45,7 @@ export default function Page() {
             })
             setTimeout(() => {
                 router.push(`/space/${response.data.spaceId}`)
-            }, 2500)
+            }, 500)
         }
     }
 
@@ -77,16 +80,16 @@ export default function Page() {
                 </CardContent>
                 <div className="flex justify-end p-3 gap-x-3">
                     <div>
-                        <Button>
+                        <Button disabled={loading}>
                             Create
                         </Button>
                     </div>
                     <div>
-                        <Button asChild variant={"secondary"}>
-                            <Link href={"/dashboard"}>
+                        <Link href={"/dashboard"}>
+                            <Button asChild variant={"secondary"}>
                                 Cancel
-                            </Link>
-                        </Button>
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </form>

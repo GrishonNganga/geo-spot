@@ -82,11 +82,11 @@ export default function PhotoSpacesTable() {
                     className="max-w-sm"
                 />
                 <div className="flex gap-x-2">
-                    <Button>
-                        <Link href="/dashboard/new">
+                    <Link href="/dashboard/new">
+                        <Button>
                             New Photospace
-                        </Link>
-                    </Button>
+                        </Button>
+                    </Link>
                 </div>
             </div>
             <div className="rounded-md border">
