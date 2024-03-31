@@ -58,8 +58,8 @@ export default function NavMenu() {
                                         <ArrowLeft />
                                     </Link>
                                 </div>
-                                <div>
-                                    Geospot
+                                <div className="bg-gradient-to-br bg-clip-text font-medium tracking-tight text-transparent md:text-xl from-slate-300 to-slate-500 text-lg">
+                                    Arboretum
                                 </div>
                                 <div>
 

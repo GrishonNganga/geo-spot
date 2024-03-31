@@ -18,6 +18,9 @@ export type IPhotoSpace = {
     _id?: ObjectId,
     spaceId?: String,
     name: string,
+    description?: string,
+    target?: number,
+    deadline?: Date
     ownerId?: IUser,
     invitations?: String[],
     access: boolean,

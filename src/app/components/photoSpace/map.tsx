@@ -14,7 +14,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import { ImagePlusIcon, PlusIcon, UserPlus2Icon } from 'lucide-react';
+import { ImagePlusIcon, UserPlus2Icon } from 'lucide-react';
 
 type LocationProps = { latitude: number, longitude: number }
 export default function MyMap({ uploads }: { uploads?: IUpload[] }) {

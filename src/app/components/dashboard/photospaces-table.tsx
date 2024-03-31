@@ -84,7 +84,7 @@ export default function PhotoSpacesTable() {
                 <div className="flex gap-x-2">
                     <Link href="/dashboard/new">
                         <Button>
-                            New Photospace
+                            New Group
                         </Button>
                     </Link>
                 </div>

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { IPhotoSpace } from "@/lib/types";
 import SpaceContainer from "./space-container";
 import { cache } from "react";
+import { Metadata } from "next";
 
 export default async function MapHolder({ params }: {
     params: { photoSpace: string }
@@ -12,7 +13,6 @@ export default async function MapHolder({ params }: {
     const photoSpaceId = params?.photoSpace
     const loggedInUser = await getLoggedInUser()
     const photoSpace: IPhotoSpace = await getPhotoSpaceBySpaceId(photoSpaceId)
-    console.log("PS", photoSpace)
     if (!photoSpace) {
         return redirect('/404')
     }
@@ -38,6 +38,17 @@ export default async function MapHolder({ params }: {
     )
 }
 
+export async function generateMetadata({ params }: {
+    params: { photoSpace: string }
+}): Promise<Metadata> {
+    const photoSpaceId = params?.photoSpace
+    const photoSpace: IPhotoSpace = await getPhotoSpaceBySpaceId(photoSpaceId)
+    console.log("PS")
+    return {
+        title: photoSpace.name,
+        description: photoSpace.description
+    }
+}
 
 const getPhotoSpaceBySpaceId = cache(async (id: String) => {
     return JSON.parse(JSON.stringify(await findPhotoSpace({ spaceId: id })))

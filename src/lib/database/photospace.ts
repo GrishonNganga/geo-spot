@@ -13,7 +13,7 @@ export const findPhotoSpace = async (data: any) => {
 }
 
 export const findPhotoSpaces = async (data: any) => {
-    const photoSpace = PhotoSpace.find(data).populate('ownerId').populate("uploads")
+    const photoSpace = PhotoSpace.find(data).populate('ownerId').populate("uploads").sort({ createdAt: -1 })
     return await photoSpace;
 }
 

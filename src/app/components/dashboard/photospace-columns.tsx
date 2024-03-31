@@ -52,7 +52,7 @@ export const columns: ColumnDef<IPhotoSpace>[] = [
     {
         accessorKey: "access",
         header: "Visibility",
-        cell: ({ row }) => (<>{row.getValue("access") && <LockIcon className="w-5 h-5 text-red-500" /> || <UnlockIcon className="w-5 h-5 text-green-500" />}</>)
+        cell: ({ row }) => (<>{row.getValue("access") && <UnlockIcon className="w-5 h-5 text-green-500" /> || <LockIcon className="w-5 h-5 text-red-500" />}</>)
     },
     // {
     //     accessorKey: "amount",

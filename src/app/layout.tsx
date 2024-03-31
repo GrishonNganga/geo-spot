@@ -8,8 +8,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Geospot",
-  description: "Visualize your photos on a map",
+  title: "Arboretum",
+  description: "Compete with friends planting trees.",
+  icons: "./icon.ico"
 };
 
 export default function RootLayout({
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <link rel="icon" href="/geo-spot.png" />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

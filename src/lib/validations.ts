@@ -7,6 +7,9 @@ export const validateCreatePhotoSpace = async (data: IPhotoSpace) => {
             .min(3)
             .max(30)
             .required(),
+        description: Joi.string().optional().allow(''),
+        target: Joi.number().optional(),
+        deadline: Joi.date().optional(),
         access: Joi.boolean()
             .required(),
         uploads: Joi.array().items(
