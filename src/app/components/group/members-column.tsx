@@ -2,10 +2,9 @@ import * as React from "react"
 import {
     ColumnDef,
 } from "@tanstack/react-table"
-import { LockIcon, MoreHorizontal, UnlockIcon } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,34 +13,40 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { IPhotoSpace } from "@/lib/types"
-import Link from "next/link"
+import { IUser } from "@/lib/types"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { CardDescription } from "@/components/ui/card"
 
-export const columns: ColumnDef<IPhotoSpace>[] = [
+export const columns: ColumnDef<IUser>[] = [
 
     {
-        accessorKey: "name",
+        accessorKey: "",
         header: "Name",
         size: 80,
         cell: ({ row }) => (
-            <Link className="flex gap-x-2 items-center" href={"/space/" + row.original.spaceId}>
+            <div className="flex gap-x-2 items-center">
                 <Avatar>
-                    <AvatarImage src={""} alt={`${name} photo`} />
+                    <AvatarImage src={row.original.image as string} alt={`${row.original.image}'s photo`} />
                     <div className="w-full uppercase px-2.5 py-2 bg-blue-400 text-xl rounded-md tracking-widest flex items-center justify-center text-white">
-                        {row.renderValue("name").split(" ")[0][0]}
+                        {
+                            row.original.name &&
+                            <span>{row.original.name.split(" ")[0][0]}</span> ||
+                            row.original.email && <span>{row.original.email[0]}</span>
+                        }
                     </div>
                 </Avatar>
-                <div>
+                <div className="flex flex-col gap-y-2">
                     <div className="capitalize">
-                        {row.getValue("name")}
+                        {
+                            row.original.name ||
+                            row.original.email.split("@")[0]
+                        }
                     </div>
                     <CardDescription className="text-xs">
-                        Public
+                        100 Trees
                     </CardDescription>
                 </div>
-            </Link>
+            </div>
         ),
     },
     {

@@ -19,7 +19,7 @@ export default function UserDropDown({ session }: { session: any }) {
     const { setTheme } = useTheme()
 
     return (
-        <div className=" flex gap-x-2 p-2.5">
+        <div className=" flex gap-x-2">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon">
@@ -28,7 +28,7 @@ export default function UserDropDown({ session }: { session: any }) {
                         <span className="sr-only">Toggle theme</span>
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="start">
                     <DropdownMenuItem onClick={() => setTheme("light")}>
                         Light
                     </DropdownMenuItem>

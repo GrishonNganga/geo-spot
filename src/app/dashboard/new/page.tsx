@@ -93,6 +93,19 @@ export default function Page() {
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <Label htmlFor="description">Target <span className="text-xs">(optional)</span></Label>
+                        <Input
+                            id="target"
+                            type="number"
+                            min="0"
+                            step="1"
+                            name="target"
+                            placeholder="How many trees to be planted"
+                            autoComplete="off"
+                            onChange={(e) => { setPhotoSpaceDetails(prevState => ({ ...prevState, [e.target.name]: e.target.value })) }}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-y-2">
+                        <Label htmlFor="description">Deadline <span className="text-xs">(optional)</span></Label>
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
@@ -115,21 +128,6 @@ export default function Page() {
                                 />
                             </PopoverContent>
                         </Popover>
-
-                    </div>
-                    <div className="flex flex-col gap-y-2">
-                        <Label htmlFor="description">Deadline <span className="text-xs">(optional)</span></Label>
-                        <Input
-                            id="name"
-                            type="number"
-                            min="0"
-                            step="1"
-                            name="description"
-                            placeholder="Deadline for planting the trees"
-                            autoComplete="off"
-                            onChange={(e) => { setPhotoSpaceDetails(prevState => ({ ...prevState, [e.target.name]: e.target.value })) }}
-                        />
-
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <Label htmlFor="access">Privacy</Label>

@@ -1,6 +1,6 @@
 'use client'
 import { IPhotoSpace } from "@/lib/types";
-import Map from "@/app/components/photoSpace/map";
+import Map from "@/app/components/map/map";
 import { photoSpaceStore } from "@/store";
 import { useEffect } from "react";
 

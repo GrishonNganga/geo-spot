@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/tooltip"
 
 import { ImagePlusIcon, UserPlus2Icon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type LocationProps = { latitude: number, longitude: number }
-export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
+export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], classNames?: string }) {
     const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false)
 
@@ -70,7 +71,7 @@ export default function MyMap({ uploads }: { uploads?: IUpload[] }) {
         )
     }
     return (
-        <div className="w-full h-full z-0 relative">
+        <div className={cn("w-full h-full z-0 relative", classNames)}>
             <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string}>
                 <Map
                     defaultCenter={{ lat: userLocation?.latitude || 0, lng: userLocation?.longitude || 0 }}

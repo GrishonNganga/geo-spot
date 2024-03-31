@@ -14,7 +14,6 @@ import {
 } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
     Table,
     TableBody,
@@ -24,11 +23,12 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import Link from "next/link"
-import { columns } from "@/app/components/dashboard/photospace-columns"
-import { getData, getLoggedInUser } from "@/lib/actions"
-import { IPhotoSpace } from "@/lib/types"
+import { columns } from "./members-column"
+import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions"
+import { IUser } from "@/lib/types"
+import { CardTitle } from "@/components/ui/card"
 
-export default function PhotoSpacesTable() {
+export default function MembersTable({ invitations }: { invitations?: String[] }) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -36,15 +36,18 @@ export default function PhotoSpacesTable() {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-    const [data, setData] = React.useState<IPhotoSpace[]>([])
+    const [data, setData] = React.useState<IUser[]>([])
     const [loading, setLoading] = React.useState(false)
 
     const pullData = async () => {
         setLoading(true)
         const user = await getLoggedInUser()
-        const d = await getData(user._id)
+        if (invitations && invitations.length > 0) {
+            const inv = await getPopulatedInvitations(invitations)
+            setData(inv)
+        }
         setLoading(false)
-        setData(d)
+
     }
 
     React.useEffect(() => {
@@ -72,43 +75,20 @@ export default function PhotoSpacesTable() {
 
     return (
         <div className="w-full">
-            <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-y-3 lg:gap-y-0 py-4">
-                <Input
-                    placeholder="Filter groups..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
+            <div className="flex lg:flex-row justify-between items-center gap-y-3 lg:gap-y-0 py-4">
+                <CardTitle className="text-xl">
+                    Members
+                </CardTitle>
                 <div className="flex gap-x-2">
                     <Link href="/dashboard/new">
-                        <Button>
-                            New Group
+                        <Button className="underline" variant={"link"}>
+                            View all
                         </Button>
                     </Link>
                 </div>
             </div>
             <div className="rounded-md border">
                 <Table>
-                    <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id} className={`w-[${header.getSize()}%]`}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
@@ -141,37 +121,14 @@ export default function PhotoSpacesTable() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No results.
+                                    No members yet.
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                    // disabled={!table.getCanPreviousPage()}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                    // disabled={!table.getCanNextPage()}
-                    >
-                        Next
-                    </Button>
-                </div>
-            </div>
+
         </div>
     )
 }
