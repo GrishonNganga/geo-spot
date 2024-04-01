@@ -6,7 +6,10 @@ const PhotoSchema = new mongoose.Schema({
     metadata: Object
 });
 
+
 const uploadSchema = new mongoose.Schema({
+    location: { type: Object, required: true },
+    trees: { type: Number, required: true, default: 1 },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

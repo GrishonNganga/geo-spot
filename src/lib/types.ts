@@ -30,16 +30,23 @@ export type IPhotoSpace = {
 export type IUpload = {
     _id?: ObjectId,
     userId?: IUser,
+    location?: ILocation,
+    trees?: number,
     photoSpaceId?: ObjectId,
-    photos?: { url: string, metadata: any }[]
+    photos?: IPhoto[]
+}
+
+export type ILocation = {
+    location: string,
+    latitude: number,
+    longitude: number
 }
 
 export type IPhoto = {
     url: String,
-    metadata: {
+    metadata?: {
         make?: string,
-        location: string,
-        description: string
+        description?: string
     }
 }
 export type Point = google.maps.LatLngLiteral & IPhoto & { key: string };

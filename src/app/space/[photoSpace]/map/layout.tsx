@@ -14,12 +14,6 @@ export default async function Layout({ params, children }: Props) {
     return (
         <div className="w-full h-dvh relative">
             {children}
-            <div className="absolute w-full top-0 px-3 z-100">
-                <Nav>
-                    <NavMenu />
-                    <UserDropDown session={session} />
-                </Nav>
-            </div>
         </div>
     )
 }

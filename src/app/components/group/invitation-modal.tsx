@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { getPopulatedInvitations, updatePhotoSpaceAction } from "@/lib/actions"
-import { IPhotoSpace } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { validateEmail } from "@/lib/validations"
 import { photoSpaceStore } from "@/store"

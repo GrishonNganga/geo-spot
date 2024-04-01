@@ -15,8 +15,6 @@ import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions";
 import ContributorCard from "./contributor";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import InvitationModal from "./invitation-modal";
-import AddPhotosModal from "./photos-modal";
 import Uploads from "./uploads";
 import { modalsStore, photoSpaceStore } from "@/store";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";

@@ -1,12 +1,11 @@
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CardTitle } from "@/components/ui/card";
 import { modalsStore } from "@/store";
 import { Avatar } from "@radix-ui/react-avatar";
 import { MoreVertical } from "lucide-react";
-import InvitationModal from "../map/invitation-modal";
-import AddPhotosModal from "../map/photos-modal";
+import InvitationModal from "./invitation-modal";
+import AddPhotosModal from "./photos-modal";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function Header({ name, photo, description, access }: { name: string, photo?: string, description?: string, access: boolean }) {

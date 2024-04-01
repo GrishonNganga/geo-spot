@@ -57,10 +57,11 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
     const getPhotosPoints = () => {
         const points: any = []
         uploads && uploads.forEach(upload => {
-            upload.photos && upload.photos.forEach((photo: any) => {
-                points.push({ url: photo.url, name: photo.metadata.location, lat: photo.metadata.latitude, lng: photo.metadata.longitude, key: `${upload._id}`, metadata: { ...(photo.metadata ? photo.metadata : {}) } })
-            })
+            if (upload.location) {
+                points.push({ lat: upload?.location?.latitude, lng: upload.location?.longitude, key: `${upload._id}` })
+            }
         })
+        console.log("UP", uploads)
         return points
     }
 
@@ -87,7 +88,7 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
             <div className='absolute bottom-0 right-0 px-5 p-8 flex flex-col gap-y-3 justify-center items-center'>
                 <div>
                     <Link href={"map"}>
-                        <ExpandIcon size={"40"}/>
+                        <ExpandIcon size={"40"} />
                     </Link>
                 </div>
             </div>
