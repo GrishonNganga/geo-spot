@@ -47,7 +47,7 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
 
     useEffect(() => {
         const saveUploads = async (photos: any) => {
-            console.log("We are here now")
+            console.log("We are here now RIGHR")
             const response = await createUploadAction({ photos: photos, ...uploads })
             setUploadInProgress(false)
             if (response) {
@@ -79,7 +79,7 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
             const filteredPhotos = photos.map((photo: IPhoto) => ({ url: photo.url, metadata: photo.metadata }))
             saveUploads(filteredPhotos)
         }
-    }, [uploads, uploadingInProgress, photoSpace, photoSpace?._id, setOpen])
+    }, [photos, uploadingInProgress, photoSpace, photoSpace?._id, setOpen])
 
     const uploadFileToFirebase = (file: any) => {
         const storageRef = ref(storage, `/files/images/${file.name}_${new Date().getTime()}`)

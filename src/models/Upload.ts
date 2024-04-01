@@ -6,9 +6,12 @@ const PhotoSchema = new mongoose.Schema({
     metadata: Object
 });
 
-
 const uploadSchema = new mongoose.Schema({
-    location: { type: Object, required: true },
+    location: {
+        latitude: { type: Number },
+        longitude: { type: Number },
+        location: { type: String }
+    },
     trees: { type: Number, required: true, default: 1 },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
