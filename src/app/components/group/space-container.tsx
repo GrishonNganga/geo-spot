@@ -15,7 +15,6 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
     const ps = photoSpaceStore(state => state.photoSpace)
 
     useEffect(() => {
-        console.log("PS", photoSpace)
         setPhotoSpace(photoSpace)
     }, [photoSpace, setPhotoSpace])
 
@@ -25,7 +24,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                 <MyMap classNames="lg:rounded-md overflow-hidden" />
             </div>
             <div className="container lg:px-0 flex flex-col gap-y-5">
-                <Header name={photoSpace.name} photo="" description={photoSpace.description} />
+                <Header name={photoSpace.name} photo="" description={photoSpace.description} access={photoSpace.access} />
                 <div className="flex flex-col lg:flex-row gap-x-8 gap-y-5">
                     <Intro description={photoSpace.description} />
                     <GeneralStats trees={100} members={10} completion={10} daysRemaining={354} />

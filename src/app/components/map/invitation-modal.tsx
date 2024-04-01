@@ -13,6 +13,7 @@ import { getPopulatedInvitations, updatePhotoSpaceAction } from "@/lib/actions"
 import { IPhotoSpace } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { validateEmail } from "@/lib/validations"
+import { photoSpaceStore } from "@/store"
 import React, { KeyboardEventHandler } from 'react';
 
 import CreatableSelect from 'react-select/creatable';
@@ -32,7 +33,8 @@ const createOption = (label: string) => ({
     value: label,
 });
 
-export default function InvitationModal({ photoSpace, open, setOpen, setInvitations }: { open: boolean, setOpen: () => void, photoSpace?: IPhotoSpace, setInvitations: (emails: String[]) => void }) {
+export default function InvitationModal({ open, setOpen, setInvitations }: { open: boolean, setOpen: () => void, setInvitations?: (emails: String[]) => void }) {
+    const photoSpace = photoSpaceStore(state => state.photoSpace)
     const [inputValue, setInputValue] = React.useState('');
     const [value, setValue] = React.useState<Option[]>([]);
     const [loading, setLoading] = React.useState(false)
@@ -87,7 +89,7 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
         setLoading(false)
         if (updatedPhotoSpace) {
             const inv = await getPopulatedInvitations(updatedPhotoSpace.invitations)
-            setInvitations(inv)
+            // setInvitations(inv)
             setValue([])
             toast.success("", {
                 description: "User invited successfully"
@@ -123,8 +125,8 @@ export default function InvitationModal({ photoSpace, open, setOpen, setInvitati
                                     borderRadius: 16,
                                     colors: {
                                         ...theme.colors,
-                                        primary25: 'hotpink',
-                                        primary: 'hotpink',
+                                        primary25: 'lightgreen',
+                                        primary: 'lightgreen',
                                     },
                                 })} components={components}
                                 inputValue={inputValue}

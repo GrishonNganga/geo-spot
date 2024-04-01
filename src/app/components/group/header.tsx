@@ -2,10 +2,19 @@ import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { modalsStore } from "@/store";
 import { Avatar } from "@radix-ui/react-avatar";
 import { MoreVertical } from "lucide-react";
+import InvitationModal from "../map/invitation-modal";
+import AddPhotosModal from "../map/photos-modal";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
-export default function Header({ name, photo, description }: { name: string, photo?: string, description?: string }) {
+export default function Header({ name, photo, description, access }: { name: string, photo?: string, description?: string, access: boolean }) {
+    const sendInvitationModal = modalsStore(state => state.sendInvitationModal)
+    const addPhotosModal = modalsStore(state => state.addPhotosModal)
+    const setSendInvitationModal = modalsStore(state => state.setSendInvitationModal)
+    const setAddPhotosModal = modalsStore(state => state.setAddPhotosModal)
+
     return (
         <div className="flex flex-col gap-y-5">
             <div className="flex justify-between items-center lg:items-end">
@@ -20,36 +29,41 @@ export default function Header({ name, photo, description }: { name: string, pho
                         {name}
                     </CardTitle>
                 </div>
-                <div className="hidden lg:flex gap-x-5">
-                    <Button>
-                        Add planted trees
-                    </Button>
-                    <Button variant={"outline"}>
-                        Invite member
-                    </Button>
-                </div>
-                <div className="flex lg:hidden">
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <MoreVertical />
-                        </PopoverTrigger>
-                        <PopoverContent className="">
-                            <div className="grid gap-4">
-                                <div className="space-y-2">
-                                    <h4 className="font-medium leading-none">Dimensions</h4>
-                                    <p className="text-sm text-muted-foreground">
-                                        Set the dimensions for the layer.
-                                    </p>
-                                </div>
-                                <div className="flex flex-col">
-
-                                </div>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
-
-                </div>
+                {
+                    !access &&
+                    <div className="hidden lg:flex gap-x-5">
+                        <Button onClick={() => { setAddPhotosModal(true) }}>
+                            Add planted trees
+                        </Button>
+                        <Button onClick={() => { setSendInvitationModal(true) }} variant={"outline"}>
+                            Invite member
+                        </Button>
+                    </div>
+                }
+                {
+                    !access &&
+                    <div className="flex lg:hidden">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <MoreVertical />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                                <DropdownMenuLabel>Menu</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => { setAddPhotosModal(true) }}>
+                                    Add planted trees
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => { setSendInvitationModal(true) }}>
+                                    Invite member
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                }
             </div>
+            <InvitationModal open={sendInvitationModal} setOpen={() => { setSendInvitationModal(!sendInvitationModal) }} />
+            <AddPhotosModal open={addPhotosModal} setOpen={() => { setAddPhotosModal(!addPhotosModal) }} />
+
         </div>
     )
 }

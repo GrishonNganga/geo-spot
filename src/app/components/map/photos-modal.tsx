@@ -15,7 +15,7 @@ import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { Autocomplete, Libraries, useJsApiLoader } from "@react-google-maps/api"
+import {  Libraries, useJsApiLoader } from "@react-google-maps/api"
 import { toast } from "sonner"
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage"
 import { storage } from "@/lib/firebase"

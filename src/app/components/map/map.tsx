@@ -14,8 +14,9 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import { ImagePlusIcon, UserPlus2Icon } from 'lucide-react';
+import { ExpandIcon, ImagePlusIcon, UserPlus2Icon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 type LocationProps = { latitude: number, longitude: number }
 export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], classNames?: string }) {
@@ -83,34 +84,11 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
                     <Markers points={getPhotosPoints()} />
                 </Map>
             </APIProvider>
-            <div className='absolute bottom-0 right-0 p-10 lg:p-20 flex flex-col gap-y-3 justify-center items-center'>
+            <div className='absolute bottom-0 right-0 px-5 p-8 flex flex-col gap-y-3 justify-center items-center'>
                 <div>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <Avatar className='shadow-md' onClick={() => { setAddPhotosModal(true) }}>
-                                    <AvatarFallback><ImagePlusIcon /></AvatarFallback>
-                                </Avatar>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Add photos</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
-                <div>
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <Avatar className='shadow-md' onClick={() => { setSendInvitationModal(true) }}>
-                                    <AvatarFallback><UserPlus2Icon /></AvatarFallback>
-                                </Avatar>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Invite contributor</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    <Link href={"map"}>
+                        <ExpandIcon size={"40"}/>
+                    </Link>
                 </div>
             </div>
         </div>
