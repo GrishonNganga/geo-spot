@@ -27,7 +27,7 @@ export default function GeneralStats({ uploads, members, target, deadline }: { u
         const trees = calculateTreesCount()
         setCompletion(calculateCompletion(trees))
         setTreesCount(trees)
-    }, [uploads, target])
+    }, [uploads, target, deadline])
 
 
     return (

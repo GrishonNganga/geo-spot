@@ -38,7 +38,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                 </div>
                 <div className="flex flex-col lg:flex-row gap-x-8">
                     <div className="lg:w-1/2">
-                        <Members invitations={[photoSpace.ownerId?.email, ...(photoSpace.invitations ? [...photoSpace.invitations] : [])]} />
+                        <Members invitations={[photoSpace.ownerId!.email, ...(photoSpace.invitations ? [...photoSpace.invitations] : [])]} />
                     </div>
                     <div className="lg:w-1/2">
                         <Trees uploads={photoSpace.uploads} />

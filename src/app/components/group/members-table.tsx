@@ -39,18 +39,19 @@ export default function MembersTable({ invitations }: { invitations?: String[] }
     const [data, setData] = React.useState<IUser[]>([])
     const [loading, setLoading] = React.useState(false)
 
-    const pullData = async () => {
-        setLoading(true)
-        const user = await getLoggedInUser()
-        if (invitations && invitations.length > 0) {
-            const inv = await getPopulatedInvitations(invitations)
-            setData(inv)
-        }
-        setLoading(false)
-
-    }
 
     React.useEffect(() => {
+
+        const pullData = async () => {
+            setLoading(true)
+            const user = await getLoggedInUser()
+            if (invitations && invitations.length > 0) {
+                const inv = await getPopulatedInvitations(invitations)
+                setData(inv)
+            }
+            setLoading(false)
+
+        }
         pullData()
     }, []);
 

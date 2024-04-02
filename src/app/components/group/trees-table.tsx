@@ -36,26 +36,27 @@ export default function TreesTable({ uploads }: { uploads?: IUpload[] }) {
     const [data, setData] = React.useState<ITreeType[]>([])
     const [loading, setLoading] = React.useState(false)
 
-    const pullData = async () => {
-        setLoading(true)
-        if (uploads && uploads?.length > 0) {
-            let cumulativeTreeKinds: ITreeType[] = []
-            uploads.forEach((upload) => {
-                const kinds = upload.treeTypes
-                kinds?.forEach((kind: ITreeType) => {
-                    if (!cumulativeTreeKinds.find((tree: ITreeType) => tree.name === kind.name)) {
-                        cumulativeTreeKinds.push(kind)
-                    }
-                })
-                return cumulativeTreeKinds
-            }, [])
-            console.log("TRRE", cumulativeTreeKinds)
-            setData(cumulativeTreeKinds)
-        }
-        setLoading(false)
-    }
-
     React.useEffect(() => {
+
+        const pullData = async () => {
+            setLoading(true)
+            if (uploads && uploads?.length > 0) {
+                let cumulativeTreeKinds: ITreeType[] = []
+                uploads.forEach((upload) => {
+                    const kinds = upload.treeTypes
+                    kinds?.forEach((kind: ITreeType) => {
+                        if (!cumulativeTreeKinds.find((tree: ITreeType) => tree.name === kind.name)) {
+                            cumulativeTreeKinds.push(kind)
+                        }
+                    })
+                    return cumulativeTreeKinds
+                }, [])
+                console.log("TRRE", cumulativeTreeKinds)
+                setData(cumulativeTreeKinds)
+            }
+            setLoading(false)
+        }
+
         pullData()
     }, []);
 

@@ -30,7 +30,7 @@ export const columns: ColumnDef<IPhotoSpace>[] = [
                 <Avatar>
                     <AvatarImage src={""} alt={`${name} photo`} />
                     <div className="w-full uppercase px-2.5 py-2 bg-blue-400 text-xl rounded-md tracking-widest flex items-center justify-center text-white">
-                        {row.renderValue("name").split(" ")[0][0]}
+                        {row.original.name.split(" ")[0][0]}
                     </div>
                 </Avatar>
                 <div>
