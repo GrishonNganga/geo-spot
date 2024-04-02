@@ -24,8 +24,8 @@ export default function Header({ name, photo, description, access }: { name: str
                             {name.split(" ")[0][0]}{name.split(" ")[0][1]}
                         </div>
                     </Avatar>
-                    <CardTitle className="">
-                        {name}
+                    <CardTitle className="text-md lg:text-2xl">
+                        {name} {access && <span className="text-xs font-light">(Public) </span> || <span className="text-xs font-light">(Private) </span>}
                     </CardTitle>
                 </div>
                 {

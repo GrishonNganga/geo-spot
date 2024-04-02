@@ -1,30 +1,24 @@
 'use client'
 import { IUpload, Point } from '@/lib/types';
 import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MarkerClusterer, Marker } from '@googlemaps/markerclusterer';
 
 import MapPoint from './map-point';
-import { modalsStore, photoStore } from '@/store';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { photoStore } from '@/store';
 
-import { ExpandIcon, ImagePlusIcon, UserPlus2Icon } from 'lucide-react';
+import { ExpandIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { forest } from './forest';
 
 type LocationProps = { latitude: number, longitude: number }
 export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], classNames?: string }) {
     const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false)
 
-    const setAddPhotosModal = modalsStore(state => state.setAddPhotosModal)
-    const setSendInvitationModal = modalsStore(state => state.setSendInvitationModal)
+    const pathname = usePathname()
     useEffect(() => {
         getUserLocation()
     }, [])
@@ -58,10 +52,9 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
         const points: any = []
         uploads && uploads.forEach(upload => {
             if (upload.location) {
-                points.push({ lat: upload?.location?.latitude, lng: upload.location?.longitude, key: `${upload._id}` })
+                points.push({ lat: upload?.location?.latitude, lng: upload.location?.longitude, location: upload.location.location, key: `${upload._id}`, photos: upload.photos })
             }
         })
-        console.log("UP", uploads)
         return points
     }
 
@@ -87,7 +80,7 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
             </APIProvider>
             <div className='absolute bottom-0 right-0 px-5 p-8 flex flex-col gap-y-3 justify-center items-center'>
                 <div>
-                    <Link href={"map"}>
+                    <Link href={`${pathname}/map`}>
                         <ExpandIcon size={"40"} />
                     </Link>
                 </div>
@@ -110,7 +103,21 @@ const Markers = ({ points }: Props) => {
     useEffect(() => {
         if (!map) return;
         if (!clusterer.current) {
-            clusterer.current = new MarkerClusterer({ map });
+            const svg = window.btoa(forest);
+            clusterer.current = new MarkerClusterer({
+                map,
+                renderer: {
+                    render({ count, position }) {
+                        return new google.maps.Marker({
+                            // label: { text: String(count), color: "white", fontSize: "10px" },
+                            position,
+                            icon: { url: `data:image/svg+xml;base64,${svg}`, scaledSize: new google.maps.Size(50, 50), },
+                            // adjust zIndex to be above other markers
+                            zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+                        });
+                    }
+                }
+            });
         }
     }, [map]);
 

@@ -6,6 +6,13 @@ const PhotoSchema = new mongoose.Schema({
     metadata: Object
 });
 
+const TreeSchema = new mongoose.Schema({
+    name: String,
+    scientificName: String,
+    desciption: String
+});
+
+
 const uploadSchema = new mongoose.Schema({
     location: {
         latitude: { type: Number },
@@ -21,7 +28,8 @@ const uploadSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PhotoSpace'
     },
-    photos: [PhotoSchema]
+    photos: [PhotoSchema],
+    treeTypes: [TreeSchema]
 }, { timestamps: true });
 
 export default mongoose.models.Upload || mongoose.model<IUpload>('Upload', uploadSchema);

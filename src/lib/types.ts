@@ -32,6 +32,7 @@ export type IUpload = {
     userId?: IUser,
     location?: ILocation,
     trees?: number,
+    treeTypes?: ITreeType[]
     photoSpaceId?: ObjectId,
     photos?: IPhoto[]
 }
@@ -49,4 +50,10 @@ export type IPhoto = {
         description?: string
     }
 }
-export type Point = google.maps.LatLngLiteral & IPhoto & { key: string };
+export type ITreeType = {
+    name?: String,
+    scientificName?: String,
+    description?: String
+}
+
+export type Point = google.maps.LatLngLiteral & { location: string, key: string, photos: IPhoto[] };

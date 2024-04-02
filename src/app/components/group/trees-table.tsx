@@ -22,11 +22,10 @@ import {
 } from "@/components/ui/table"
 import Link from "next/link"
 import { columns } from "./trees-column"
-import { getLoggedInUser, getPopulatedInvitations } from "@/lib/actions"
-import { IUser } from "@/lib/types"
+import { ITreeType, IUpload, IUser } from "@/lib/types"
 import { CardTitle } from "@/components/ui/card"
 
-export default function TreesTable({ invitations }: { invitations?: String[] }) {
+export default function TreesTable({ uploads }: { uploads?: IUpload[] }) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -34,18 +33,26 @@ export default function TreesTable({ invitations }: { invitations?: String[] }) 
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-    const [data, setData] = React.useState<IUser[]>([])
+    const [data, setData] = React.useState<ITreeType[]>([])
     const [loading, setLoading] = React.useState(false)
 
     const pullData = async () => {
         setLoading(true)
-        const user = await getLoggedInUser()
-        if (invitations && invitations.length > 0) {
-            const inv = await getPopulatedInvitations(invitations)
-            setData(inv)
+        if (uploads && uploads?.length > 0) {
+            let cumulativeTreeKinds: ITreeType[] = []
+            uploads.forEach((upload) => {
+                const kinds = upload.treeTypes
+                kinds?.forEach((kind: ITreeType) => {
+                    if (!cumulativeTreeKinds.find((tree: ITreeType) => tree.name === kind.name)) {
+                        cumulativeTreeKinds.push(kind)
+                    }
+                })
+                return cumulativeTreeKinds
+            }, [])
+            console.log("TRRE", cumulativeTreeKinds)
+            setData(cumulativeTreeKinds)
         }
         setLoading(false)
-
     }
 
     React.useEffect(() => {
@@ -119,7 +126,7 @@ export default function TreesTable({ invitations }: { invitations?: String[] }) 
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No members yet.
+                                    No trees added...
                                 </TableCell>
                             </TableRow>
                         )}

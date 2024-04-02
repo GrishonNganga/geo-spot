@@ -23,7 +23,23 @@ import { createUploadAction } from "@/lib/actions"
 import { toast } from "sonner"
 import { photoSpaceStore } from "@/store"
 import { useRouter } from "next/navigation"
+import CreatableSelect from 'react-select/creatable';
+import { cn } from "@/lib/utils"
+import React, { KeyboardEventHandler } from 'react';
 
+const components = {
+    DropdownIndicator: null,
+};
+
+interface Option {
+    readonly label: string;
+    readonly value: string;
+}
+
+const createOption = (label: string) => ({
+    label,
+    value: label,
+});
 
 const libraries: Libraries = ['places'];
 
@@ -32,6 +48,8 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
     const [uploadingInProgress, setUploadInProgress] = useState(false)
     const [photos, setPhotos] = useState<any>([])
     const [selectedLocation, setSelectedLocation] = useState<{ value: any, label: string } | undefined>()
+    const [inputValue, setInputValue] = useState('');
+    const [treeKinds, setTreeKinds] = useState<Option[]>([]);
 
     const photoSpace = photoSpaceStore(state => state.photoSpace)
     const setPhotoSpace = photoSpaceStore(state => state.setPhotoSpace)
@@ -47,8 +65,14 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
 
     useEffect(() => {
         const saveUploads = async (photos: any) => {
-            console.log("We are here now RIGHR")
-            const response = await createUploadAction({ photos: photos, ...uploads })
+            const trees = treeKinds.map(v => ({ name: v.value }))
+            if (trees.length == 0) {
+                toast.error("", {
+                    description: "Emails not provided",
+                })
+                return
+            }
+            const response = await createUploadAction({ photos: photos, ...uploads, treeTypes: trees, photoSpaceId: photoSpace!._id })
             setUploadInProgress(false)
             if (response) {
                 toast.success("Photos added successfully")
@@ -117,6 +141,32 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
         }
     }
 
+    const handleChange = (val: any) => {
+        setTreeKinds(val);
+    }
+
+    const handleInput = async (handleInput: string) => {
+        if (!inputValue) return
+        const exists = treeKinds.find(op => op.value === inputValue)
+        if (exists) {
+            toast.error("", {
+                description: "Tree type already added",
+            })
+            return
+        }
+        setTreeKinds(prevState => [...prevState, createOption(inputValue)])
+        setInputValue('');
+    }
+
+    const handleKeyDown: KeyboardEventHandler = async (event) => {
+        if (!inputValue) return;
+        switch (event.key) {
+            case 'Enter':
+            case 'Tab':
+                handleInput(inputValue)
+                event.preventDefault();
+        }
+    };
 
     const onPlaceChanged = (e: any) => {
         if (e.value.place_id) {
@@ -234,7 +284,7 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
                         />
                     </div>
                     <div className="mb-3">
-                        <Label htmlFor="Trees planted"></Label>
+                        <Label htmlFor="trees">Trees planted</Label>
                         <Input
                             name="trees"
                             type="number"
@@ -242,6 +292,32 @@ export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOp
                             step={1}
                             min={1}
                             onChange={(e) => { setUploads(prevState => ({ ...prevState, [e.target.name]: e.target.value })) }}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="trees">Trees types</Label>
+                        <CreatableSelect
+                            className={cn("w-full placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50")}
+                            theme={(theme) => ({
+                                ...theme,
+                                borderRadius: 16,
+                                colors: {
+                                    ...theme.colors,
+                                    primary25: 'lightgreen',
+                                    primary: 'lightgreen',
+                                },
+                            })}
+                            components={components}
+                            inputValue={inputValue}
+                            isClearable
+                            isMulti
+                            menuIsOpen={false}
+                            onChange={handleChange}
+                            onBlur={() => handleInput(inputValue)}
+                            onInputChange={(newValue) => setInputValue(newValue)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Add Trees..."
+                            value={treeKinds}
                         />
                     </div>
                     <input

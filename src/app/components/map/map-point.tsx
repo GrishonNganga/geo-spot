@@ -1,23 +1,16 @@
 import { Point } from "@/lib/types";
-import Image from 'next/image';
 
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-} from "@/components/ui/tooltip"
 import MapPhotoDisplay from "./map-photo-display";
+import { TreesIcon } from "lucide-react";
+import { forest } from "./forest";
+import Image from "next/image";
 
 export default function MapPoint({ point, open, setOpen }: { point: Point, open: boolean, setOpen: () => void }) {
     return (
-        <div className="bg-red-500">
-            <TooltipProvider>
-                <Tooltip open={true}>
-                    <TooltipContent avoidCollisions={false} className="p-1 cursor-pointer" onPointerDownOutside={setOpen}>
-                        <Image src={point.url as string} alt="Photo" width={100} height={100} className='w-20 h-20 rounded-md object-cover' />
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+        <div className="">
+            <div className="">
+                <Image src={"/forest.svg"} width={50} height={50} alt={point.location} />
+            </div>
             {
                 open && <MapPhotoDisplay point={point} />
             }

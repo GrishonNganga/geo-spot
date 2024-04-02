@@ -38,7 +38,7 @@ export const columns: ColumnDef<IPhotoSpace>[] = [
                         {row.getValue("name")}
                     </div>
                     <CardDescription className="text-xs">
-                        Public
+                        {row.original.access && "Public" || "Private"}
                     </CardDescription>
                 </div>
             </Link>

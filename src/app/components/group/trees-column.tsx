@@ -2,25 +2,14 @@ import * as React from "react"
 import {
     ColumnDef,
 } from "@tanstack/react-table"
-import { MoreHorizontal, TreePine } from "lucide-react"
+import { TreePine } from "lucide-react"
+import { ITreeType, IUser } from "@/lib/types"
+import { Avatar } from "@/components/ui/avatar"
 
-import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { IUser } from "@/lib/types"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
-import { CardDescription } from "@/components/ui/card"
-
-export const columns: ColumnDef<IUser>[] = [
+export const columns: ColumnDef<ITreeType>[] = [
 
     {
-        accessorKey: "",
+        accessorKey: "name",
         header: "Name",
         size: 80,
         cell: ({ row }) => (
@@ -32,24 +21,10 @@ export const columns: ColumnDef<IUser>[] = [
                 </Avatar>
                 <div className="flex flex-col gap-y-2">
                     <div className="capitalize">
-                        Mahogany
+                        {row.original.name}
                     </div>
                 </div>
             </div>
         ),
-    },
-    {
-        accessorKey: "",
-        header: "Name",
-        size: 80,
-        cell: ({ row }) => (
-            <div className="flex gap-x-2 items-center">
-                <div className="flex flex-col gap-y-2">
-                    <div className="capitalize">
-                        1,000
-                    </div>
-                </div>
-            </div>
-        ),
-    },
+    }
 ]
