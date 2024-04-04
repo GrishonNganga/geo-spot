@@ -2,10 +2,9 @@ import * as React from "react"
 import {
     ColumnDef,
 } from "@tanstack/react-table"
-import { LockIcon, MoreHorizontal, UnlockIcon } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,10 +13,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+
 import { IPhotoSpace } from "@/lib/types"
 import Link from "next/link"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CardDescription } from "@/components/ui/card"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export const columns: ColumnDef<IPhotoSpace>[] = [
 
@@ -42,6 +44,29 @@ export const columns: ColumnDef<IPhotoSpace>[] = [
                     </CardDescription>
                 </div>
             </Link>
+        ),
+    },
+    {
+        accessorKey: "ownerId",
+        header: "Admin",
+        size: 80,
+        cell: ({ row }) => (
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Avatar>
+                            <AvatarFallback className="cursor-pointer">
+                                {row.original?.ownerId?.name[0]}
+                            </AvatarFallback>
+                        </Avatar>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <div className="bg-white">
+                            {row.original?.ownerId?.name}
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
         ),
     },
     {

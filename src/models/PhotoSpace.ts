@@ -6,6 +6,7 @@ const photoSpaceSchema = new mongoose.Schema({
     name: { type: String, required: true },
     description: { type: String },
     target: { type: Number },
+    raised: { type: Number },
     deadline: { type: Date },
     invitations: [{ type: String }],
     access: { type: Boolean, required: true, default: false },
@@ -14,6 +15,10 @@ const photoSpaceSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    users: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 }, { timestamps: true });
 
 export default mongoose.models.PhotoSpace || mongoose.model<IPhotoSpace>('PhotoSpace', photoSpaceSchema);

@@ -17,8 +17,8 @@ export const findPhotoSpaces = async (data: any) => {
     return await photoSpace;
 }
 
-export const getPhotoSpace = async (_id: ObjectId) => {
-    const photoSpace = PhotoSpace.findOne({ _id })
+export const getPhotoSpace = async (data: any) => {
+    const photoSpace = PhotoSpace.findOne(data)
     return await photoSpace;
 }
 
@@ -27,7 +27,8 @@ interface UpdateObject {
     $set?: { [key: string]: any };
 }
 
-export const updatePhotoSpace = async (_id?: ObjectId, data?: any) => {
+export const updatePhotoSpace = async (_id?: ObjectId, data?: any, options: { session?: any } = {}) => {
+    const { session } = options
     let updateObject: UpdateObject = { $addToSet: {} };
     for (const key of Object.keys(data)) {
         if (Array.isArray(data[key])) {
@@ -39,6 +40,20 @@ export const updatePhotoSpace = async (_id?: ObjectId, data?: any) => {
     const photoSpace = await PhotoSpace.findOneAndUpdate({
         _id
     }, updateObject,
-        { upsert: false, new: true }).populate('ownerId').populate("uploads")
+        { upsert: false, new: true, session }).populate('ownerId').populate("uploads")
+    return await photoSpace;
+}
+
+export const removeUserFromPhotoSpace = async (_id?: ObjectId, userId?: ObjectId, options: { session?: any } = {}) => {
+    const { session } = options
+    const photoSpace = await PhotoSpace.findOneAndUpdate(
+        {
+            _id
+        },
+        {
+            $unset: { users: userId }
+        },
+        { session }
+    ).populate('ownerId').populate("uploads")
     return await photoSpace;
 }

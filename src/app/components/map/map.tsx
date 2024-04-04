@@ -4,6 +4,8 @@ import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-m
 import { useEffect, useRef, useState } from 'react';
 import { MarkerClusterer, Marker } from '@googlemaps/markerclusterer';
 
+import {useApiIsLoaded} from '@vis.gl/react-google-maps';
+
 import MapPoint from './map-point';
 import { photoStore } from '@/store';
 
@@ -17,6 +19,8 @@ type LocationProps = { latitude: number, longitude: number }
 export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], classNames?: string }) {
     const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false)
+
+    const apiIsLoaded = useApiIsLoaded();
 
     const pathname = usePathname()
     useEffect(() => {

@@ -8,7 +8,6 @@ export default function GeneralStats({ uploads, members, target, deadline }: { u
     const [treesCount, setTreesCount] = useState(0)
     const [completion, setCompletion] = useState(0)
     const [daysRemaining, setDaysRemaining] = useState(0)
-    const dayDiffRef = useRef<any>()
 
     useEffect(() => {
         const calculateTreesCount = () => {

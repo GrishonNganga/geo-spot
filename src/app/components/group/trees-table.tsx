@@ -51,7 +51,6 @@ export default function TreesTable({ uploads }: { uploads?: IUpload[] }) {
                     })
                     return cumulativeTreeKinds
                 }, [])
-                console.log("TRRE", cumulativeTreeKinds)
                 setData(cumulativeTreeKinds)
             }
             setLoading(false)

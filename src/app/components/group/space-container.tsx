@@ -10,6 +10,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import Intro from "./intro";
 import PrivateGeneralStats from "./stats/private-general-stats";
 import PublicGeneralStats from "./stats/public-general-stats";
+import Events from "./events";
 
 export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace }) {
     const setPhotoSpace = photoSpaceStore(state => state.setPhotoSpace)
@@ -29,21 +30,30 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                 <div className="flex flex-col lg:flex-row gap-x-8 gap-y-5">
                     <Intro description={photoSpace.description} />
                     {
-                        //Private groups
+                        //Private group
                         !photoSpace.access &&
                         <PrivateGeneralStats uploads={photoSpace.uploads} members={(photoSpace.invitations?.length || 0) + 1} target={photoSpace.target} deadline={photoSpace.deadline} />
+                        //Public group
                         ||
-                        <PublicGeneralStats trees={100} members={10} completion={10} daysRemaining={354} />
+                        <PublicGeneralStats members={photoSpace.users?.length || 0} trees={photoSpace.raised || 0} completion={10} deadline={photoSpace.deadline} />
                     }
                 </div>
-                <div className="flex flex-col lg:flex-row gap-x-8">
-                    <div className="lg:w-1/2">
-                        <Members invitations={[photoSpace.ownerId!.email, ...(photoSpace.invitations ? [...photoSpace.invitations] : [])]} />
+                {
+                    !photoSpace.access &&
+                    <div className="flex flex-col lg:flex-row gap-x-8">
+                        <div className="lg:w-1/2">
+                            <Members invitations={[photoSpace.ownerId!.email, ...(photoSpace.invitations ? [...photoSpace.invitations] : [])]} />
+                        </div>
+                        <div className="lg:w-1/2">
+                            <Trees uploads={photoSpace.uploads} />
+                        </div>
                     </div>
-                    <div className="lg:w-1/2">
-                        <Trees uploads={photoSpace.uploads} />
+                    ||
+                    <div>
+                        <Events />
                     </div>
-                </div>
+                }
+
             </div>
         </div>
     )

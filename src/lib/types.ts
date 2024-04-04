@@ -5,6 +5,7 @@ export type IUser = {
     name: String,
     email: String,
     image?: String,
+    groups?: ObjectId[],
 }
 
 export type Payment = {
@@ -20,11 +21,13 @@ export type IPhotoSpace = {
     name: string,
     description?: string,
     target?: number,
+    raised?: number,
     deadline?: Date
     ownerId?: IUser,
     invitations?: String[],
     access: boolean,
-    uploads?: IUpload[]
+    uploads?: IUpload[],
+    users?: ObjectId[]
 }
 
 export type IUpload = {
@@ -56,4 +59,19 @@ export type ITreeType = {
     description?: String
 }
 
+export type IEvent = {
+    name: String,
+    description?: String,
+    photo?: String,
+    date?: Date,
+    location?: ILocation,
+    start?: Date,
+    end?: Date,
+    attendees?: IUser,
+    price?: Number,
+    target?: Number,
+    capacity?: Number,
+    owner?: ObjectId,
+    group?: ObjectId
+}
 export type Point = google.maps.LatLngLiteral & { location: string, key: string, photos: IPhoto[] };
