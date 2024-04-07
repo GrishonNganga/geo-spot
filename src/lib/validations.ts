@@ -1,5 +1,5 @@
 const Joi = require('joi');
-import { IEvent, IPhotoSpace } from "@/lib/types";
+import { IEvent, IPhotoSpace, IUser } from "@/lib/types";
 
 export const validateCreatePhotoSpace = async (data: IPhotoSpace) => {
     const schema = Joi.object({
@@ -15,6 +15,24 @@ export const validateCreatePhotoSpace = async (data: IPhotoSpace) => {
         uploads: Joi.array().items(
             Joi.string()
         ),
+    })
+    try {
+        const value = await schema.validateAsync(data);
+        return { status: true }
+    }
+    catch (err: any) {
+        return { status: false, message: err.details[0].message }
+    }
+}
+
+export const validateUser = async (data: IUser) => {
+    const schema = Joi.object({
+        name: Joi.string()
+            .min(3)
+            .max(30)
+            .required(),
+        email: Joi.string()
+            .email({ minDomainSegments: 2, tlds: false }),
     })
     try {
         const value = await schema.validateAsync(data);

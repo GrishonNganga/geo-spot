@@ -17,7 +17,8 @@ export function UnAuthenticated() {
 
     const status = searchParams?.get('status') || null
     const message = searchParams?.get('message') || ""
-
+    const then = searchParams?.get("then")
+    console.log("THEN", then)
     useEffect(() => {
         if (status == "error") {
             toast.error(message)
@@ -42,7 +43,7 @@ export function UnAuthenticated() {
                         <h1 className="text-3xl font-bold">Welcome aboard</h1>
                         <p className="text-gray-500 dark:text-gray-400">Sign up with your Google account</p>
                     </div>
-                    <Button disabled={loading} className="w-full" onClick={() => { setLoading(true); signIn("google", { callbackUrl: "/api/v1/auth/google-validate-signin" }) }}>Sign up with Google</Button>
+                    <Button disabled={loading} className="w-full" onClick={() => { setLoading(true); signIn("google", { callbackUrl: `/api/v1/auth/google-validate-signin${then ? `?then=${then}` : ""}` }) }}>Sign up with Google</Button>
                 </div>
             </div>
         </div>

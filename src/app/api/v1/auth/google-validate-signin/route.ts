@@ -11,6 +11,9 @@ export const GET = async (_req: NextRequest, _res: NextResponse) => {
     if (!session || !session.user) {
         return redirect('/signup')
     }
+    const url = new URL(_req.url);
+    const searchParams = new URLSearchParams(url.search);
+    const then = searchParams?.get("then")
     const connect = await dbConnect()
     if (!connect) {
         cookies().delete("next-auth.session-token")
@@ -27,6 +30,9 @@ export const GET = async (_req: NextRequest, _res: NextResponse) => {
         })
     } catch (err: any) {
         if (err.code === 11000) {
+            if (then) {
+                return redirect(then)
+            }
             return redirect('/dashboard')
         }
         if (err.name === 'ValidationError') {
@@ -37,6 +43,9 @@ export const GET = async (_req: NextRequest, _res: NextResponse) => {
         cookies().set("next-auth.callback-url", "")
         cookies().set("next-auth.csrf-token", "")
         return redirect(`/signup?status=error&message=${err.mesage}`)
+    }
+    if (then) {
+        return redirect(then)
     }
     return redirect('/dashboard')
 }

@@ -19,7 +19,7 @@ export default async function Space({ params }: { params: { photoSpace: string }
         return true
     }
     const hasAccess = (userId?: String) => {
-        if (!photoSpace.access) {
+        if (photoSpace.access) {
             return true
         }
         return photoSpace?.invitations?.includes(loggedInUser.email)

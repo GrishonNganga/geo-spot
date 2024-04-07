@@ -4,7 +4,7 @@ import { APIProvider, AdvancedMarker, Map, useMap } from '@vis.gl/react-google-m
 import { useEffect, useRef, useState } from 'react';
 import { MarkerClusterer, Marker } from '@googlemaps/markerclusterer';
 
-import {useApiIsLoaded} from '@vis.gl/react-google-maps';
+import { useApiIsLoaded } from '@vis.gl/react-google-maps';
 
 import MapPoint from './map-point';
 import { photoStore } from '@/store';
@@ -16,7 +16,7 @@ import { usePathname } from 'next/navigation';
 import { forest } from './forest';
 
 type LocationProps = { latitude: number, longitude: number }
-export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], classNames?: string }) {
+export default function MyMap({ uploads, classNames, expandMap = false }: { uploads?: IUpload[], classNames?: string, expandMap?: boolean }) {
     const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
     const [loadingLocation, setLoadingLocation] = useState(false)
 
@@ -46,11 +46,22 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
                 (error) => {
                     console.error('Error getting user location:', error);
                     setLoadingLocation(false)
-
+                    showLocationsBasedOnIP();
                 }
             );
+        } else {
+            console.log("Tuko hapa")
         }
     };
+
+    const showLocationsBasedOnIP = () => {
+        fetch('https://geolocation-db.com/json/')
+            .then(response => response.json())
+            .then(data => {
+                setUserLocation({ latitude: data.latitude, longitude: data.longitude })
+                window.localStorage.setItem('user-location', JSON.stringify({ latitude: data.latitude, longitude: data.longitude }))
+            })
+    }
 
     const getPhotosPoints = () => {
         const points: any = []
@@ -70,7 +81,7 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
         )
     }
     return (
-        <div className={cn("w-full h-full z-0 relative", classNames)}>
+        <div className={cn("w-full h-full z-0 relative border rounded-md", classNames)}>
             <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string}>
                 <Map
                     defaultCenter={{ lat: userLocation?.latitude || 0, lng: userLocation?.longitude || 0 }}
@@ -82,13 +93,16 @@ export default function MyMap({ uploads, classNames }: { uploads?: IUpload[], cl
                     <Markers points={getPhotosPoints()} />
                 </Map>
             </APIProvider>
-            <div className='absolute bottom-0 right-0 px-5 p-8 flex flex-col gap-y-3 justify-center items-center'>
-                <div>
-                    <Link href={`${pathname}/map`}>
-                        <ExpandIcon size={"40"} />
-                    </Link>
+            {
+                expandMap &&
+                <div className='absolute bottom-0 right-0 px-5 p-8 flex flex-col gap-y-3 justify-center items-center'>
+                    <div>
+                        <Link href={`${pathname}/map`}>
+                            <ExpandIcon size={"40"} />
+                        </Link>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     )
 };

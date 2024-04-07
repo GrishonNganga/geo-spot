@@ -27,9 +27,7 @@ export async function generateMetadata({ params }: {
 
 export default async function Layout({ params, children }: Props) {
     const session = await getSession()
-    if (!session) {
-        return redirect('/signup')
-    }
+
     return (
         <div>
             <div className="container">

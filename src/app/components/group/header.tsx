@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { IUser } from "@/lib/types";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Header({ name, photo, description, access }: { name: string, photo?: string, description?: string, access: boolean }) {
     const [user, setUser] = useState<IUser>()
@@ -25,7 +25,8 @@ export default function Header({ name, photo, description, access }: { name: str
     const [loadingData, setLoadingData] = useState(false)
 
     const pathname = usePathname()
-
+    const router = useRouter()
+    
     const photoSpace = photoSpaceStore(state => state.photoSpace)
 
     useEffect(() => {
@@ -61,7 +62,7 @@ export default function Header({ name, photo, description, access }: { name: str
             }
         }
     }
-    if (!user && !loadingData) {
+    if (!user && loadingData) {
         return (
             <Skeleton />
         )
@@ -69,6 +70,10 @@ export default function Header({ name, photo, description, access }: { name: str
 
     const leaveGroup = () => {
 
+    }
+
+    const loginAndJoinGroup = () => {
+        router.push(`/signup?then=${pathname}`)
     }
 
     return (
@@ -193,6 +198,14 @@ export default function Header({ name, photo, description, access }: { name: str
                         </div>
                     </>
                 }
+                {
+                    !user &&
+                    <>
+                        <Button disabled={loading} onClick={loginAndJoinGroup}>
+                            Join group
+                        </Button>
+                    </>
+                }
             </div>
             <InvitationModal open={sendInvitationModal} setOpen={() => { setSendInvitationModal(!sendInvitationModal) }} />
             <AddPhotosModal open={addPhotosModal} setOpen={() => { setAddPhotosModal(!addPhotosModal) }} />
@@ -212,12 +225,12 @@ const Skeleton = () => {
 
                         </div>
                     </Avatar>
-                    <div className="w-1/2 lg:w-1/4 h-8 rounded-md bg-gray-100">
+                    <div className="w-1/2 lg:w-1/4 h-8 rounded-md bg-accent/40">
 
                     </div>
                 </div>
 
-                <div className="hidden lg:flex gap-x-5 w-24 h-8 bg-gray-100 animate-pulse rounded-md">
+                <div className="hidden lg:flex gap-x-5 w-24 h-8 bg-accent/40 animate-pulse rounded-md">
 
                 </div>
                 <div className="flex lg:hidden w-2 h-10 bg-gray-100 rounded-md animate-pulse">

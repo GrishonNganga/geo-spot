@@ -23,7 +23,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
     return (
         <div className="lg:container">
             <div className="w-full h-52">
-                <MyMap classNames="lg:rounded-md overflow-hidden" uploads={photoSpace.uploads} />
+                <MyMap classNames="lg:rounded-md overflow-hidden" uploads={photoSpace.uploads} expandMap />
             </div>
             <div className="container lg:px-0 flex flex-col gap-y-5">
                 <Header name={photoSpace.name} photo="" description={photoSpace.description} access={photoSpace.access} />
