@@ -13,23 +13,24 @@ export const createEvent = async (data: IEvent) => {
 }
 
 export const findEvent = async (data: any) => {
-    const event = Event.findOne(data)
+    const event = Event.findOne(data).populate('owner').populate('attendees').populate("group")
     return await event;
 }
 
-export async function findEvents(field: string, value: string | ObjectId | number, useAggregate: boolean = false) {
+export async function findEvents(field: string, value: string | ObjectId | number, filter?: { key: String, value: Object } | [{ key: String, value: Object }], useAggregate: boolean = false) {
     try {
         if (useAggregate) {
             const events = await Event.aggregate([
                 {
                     $match: {
                         [field]: value
-                    }
+                    },
+                    [filter?.key]: filter?.value
                 }
             ]);
             return events;
         } else {
-            const events = await Event.find({ [field]: value });
+            const events = await Event.find({ [field]: value, [filter?.key]: filter?.value }).populate('owner').populate('attendees').populate("group");
             return events;
         }
     } catch (error) {

@@ -13,7 +13,7 @@ import { ObjectId } from "mongoose"
 import { createUpload } from "./database/upload"
 import { cache } from "react"
 import mongoose from "mongoose"
-import { createEvent, findEvents } from "./database/events"
+import { createEvent, findEvent, findEvents } from "./database/events"
 
 export async function getSession() {
     const session = await getServerSession(authOptions)
@@ -123,19 +123,19 @@ export async function joinGroupAction(data: { groupId: ObjectId }) {
     }
 }
 
-export async function getPublicGroupStats(_id: ObjectId) {
+export const getPublicGroupStats = cache(async (_id: ObjectId) => {
     const usersCount = await findUsers("groupId", _id, true)
     return JSON.parse(JSON.stringify({ users: usersCount }))
-}
+})
 
-export default async function getGroupEventsAction(_id: ObjectId) {
-    const events = await findEvents("group", _id)
+export const getGroupEventsAction = cache(async (_id: ObjectId, filter?: any) => {
+    const events = await findEvents("group", _id, filter)
     if (events) {
         return JSON.parse(JSON.stringify({ events: events, status: "success" }))
     } else {
         return JSON.parse(JSON.stringify({ status: "error", message: "Something wrong happened" }))
     }
-}
+})
 
 export const createEventAction = async (data: IEvent) => {
     const connected = await dbConnect()
@@ -143,3 +143,8 @@ export const createEventAction = async (data: IEvent) => {
     const event = await createEvent({ ...data, owner: user._id })
     return JSON.parse(JSON.stringify(event))
 }
+
+export const getEventAction = cache(async (data: any) => {
+    const event = await findEvent(data)
+    return JSON.parse(JSON.stringify({ event: event }))
+})

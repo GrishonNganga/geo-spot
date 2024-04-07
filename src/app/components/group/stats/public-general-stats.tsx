@@ -5,8 +5,10 @@ import { Calendar, TreePine, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
-export default function GeneralStats({ members, trees, completion, deadline }: { trees: number, members: number, completion: number, deadline?: Date }) {
+export default function GeneralStats({ members, trees, target, deadline }: { trees: number, members: number, target: number, deadline?: Date }) {
     const [daysRemaining, setDaysRemaining] = useState(0)
+    const [completion, setCompletion] = useState(0)
+
     const photoSpace = photoSpaceStore(state => state.photoSpace)
 
     useEffect(() => {
@@ -16,11 +18,15 @@ export default function GeneralStats({ members, trees, completion, deadline }: {
     }, [photoSpace])
 
     useEffect(() => {
+        const calculateCompletion = (treesCount: number) => {
+            return Math.ceil((treesCount / target!) * 100)
+        }
 
         if (deadline) {
             const timeDifference = new Date(deadline).getTime() - new Date().getTime()
             const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24))
             setDaysRemaining(daysDifference)
+            setCompletion(calculateCompletion(trees))
         }
     }, [deadline])
 
@@ -49,12 +55,15 @@ export default function GeneralStats({ members, trees, completion, deadline }: {
                     Planted
                 </div>
             </Card>
-            <Card className="w-20 p-2 bg-green-50 dark:bg-background flex flex-col items-center justify-center rounded-md">
-                <CircularProgressbar value={completion} text={`${completion}%`} styles={buildStyles({ pathColor: "#22c55e", textColor: "#22c55e" })} />
-                <div className="text-xs text-muted-foreground">
-                    Complete
-                </div>
-            </Card>
+            {
+                target &&
+                <Card className="w-20 p-2 bg-green-50 dark:bg-background flex flex-col items-center justify-center rounded-md">
+                    <CircularProgressbar value={completion} text={`${completion}%`} styles={buildStyles({ pathColor: "#22c55e", textColor: "#22c55e" })} />
+                    <div className="text-xs text-muted-foreground">
+                        Complete
+                    </div>
+                </Card>
+            }
             {
                 deadline &&
                 <Card className="w-20 p-2 h-full bg-green-50 dark:bg-background flex flex-col items-center justify-center rounded-md">

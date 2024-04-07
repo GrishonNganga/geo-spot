@@ -60,6 +60,7 @@ export type ITreeType = {
 }
 
 export type IEvent = {
+    _id?: ObjectId,
     name: String,
     description?: String,
     photo?: String,

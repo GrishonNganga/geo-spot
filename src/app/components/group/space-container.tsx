@@ -35,7 +35,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                         <PrivateGeneralStats uploads={photoSpace.uploads} members={(photoSpace.invitations?.length || 0) + 1} target={photoSpace.target} deadline={photoSpace.deadline} />
                         //Public group
                         ||
-                        <PublicGeneralStats members={photoSpace.users?.length || 0} trees={photoSpace.raised || 0} completion={10} deadline={photoSpace.deadline} />
+                        <PublicGeneralStats members={photoSpace.users?.length || 0} trees={photoSpace.raised || 0} target={photoSpace.target || 0} deadline={photoSpace.deadline} />
                     }
                 </div>
                 {
@@ -49,8 +49,10 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                         </div>
                     </div>
                     ||
-                    <div>
-                        <Events />
+                    <div className="flex flex-col lg:flex-row gap-x-5">
+                        <div className="lg:w-1/2">
+                            <Events />
+                        </div>
                     </div>
                 }
 

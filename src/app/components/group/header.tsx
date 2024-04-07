@@ -208,7 +208,7 @@ const Skeleton = () => {
                 <div className="w-full flex items-center gap-x-4 mt-5">
                     <Avatar>
                         <AvatarImage alt={`${name} photo`} />
-                        <div className="uppercase w-12 h-12 px-3 py-2.5 bg-gray-100 animate-pulse text-xl rounded-md tracking-widest text-white">
+                        <div className="uppercase w-12 h-12 px-3 py-2.5 bg-accent/40 animate-pulse text-xl rounded-md tracking-widest text-white">
 
                         </div>
                     </Avatar>

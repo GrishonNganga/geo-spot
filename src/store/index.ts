@@ -1,4 +1,4 @@
-import { IPhotoSpace } from '@/lib/types'
+import { IEvent, IPhotoSpace } from '@/lib/types'
 import { create } from 'zustand'
 
 type PhotoStore = {
@@ -34,4 +34,14 @@ export const modalsStore = create<ModalsStore>()((set) => ({
     setSendInvitationModal: (newState: boolean) => set(() => ({ sendInvitationModal: newState })),
     setAddPhotosModal: (newState: boolean) => set(() => ({ addPhotosModal: newState })),
 
+}))
+
+type EventStore = {
+    event: IEvent | undefined
+    setEvent: (newState: IEvent | undefined) => void
+}
+
+export const eventStore = create<EventStore>()((set) => ({
+    event: undefined,
+    setEvent: (newState: IEvent | undefined) => set(() => ({ event: newState })),
 }))

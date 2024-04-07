@@ -153,7 +153,7 @@ export default function NewEvent({ group }: { group: IPhotoSpace }) {
                 </div>
             </div>
             <div className="w-full">
-                <div className="lg:w-1/2 flex flex-col gap-y-5 mb-10">
+                <div className="w-3/4 flex flex-col gap-y-5 mb-10">
                     <div className="flex flex-col mt-5 lg:mt-0 gap-y-3">
                         <Label htmlFor="name">
                             Name

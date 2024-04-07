@@ -43,6 +43,7 @@ const createOption = (label: string) => ({
 
 const libraries: Libraries = ['places'];
 
+
 export default function AddPhotosModal({ open, setOpen }: { open: boolean, setOpen: () => void }) {
     const [uploads, setUploads] = useState<IUpload>()
     const [uploadingInProgress, setUploadInProgress] = useState(false)

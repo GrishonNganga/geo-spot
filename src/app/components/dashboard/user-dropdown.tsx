@@ -47,7 +47,7 @@ export default function UserDropDown({ session }: { session: any }) {
                         <Avatar>
                             <AvatarImage src={session.user.image} alt={`${session.user.name}`} />
                             <AvatarFallback className="capitalize font-semibold tex-lg cursor-pointer">
-                                {session.user.name.split(" ")[0][0]} {session.user.name.split(" ")[1][0]}
+                                {session.user.name.split(" ")[0][0]}
                             </AvatarFallback>
                         </Avatar>
                     </DropdownMenuTrigger>
