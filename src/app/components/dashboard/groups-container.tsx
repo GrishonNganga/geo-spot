@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import {
     ColumnFiltersState,
@@ -12,7 +12,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 
-import { columns } from "@/app/components/dashboard/photospace-columns"
+import { columns } from "@/app/components/dashboard/groups-columns"
 
 import Actions from "./actions"
 import GroupsTable from "./groups-table"

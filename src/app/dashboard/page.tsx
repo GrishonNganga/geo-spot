@@ -1,8 +1,8 @@
-import PhotoSpacesContainer from "../components/dashboard/photospaces-container";
+import GroupsContainer from "../components/dashboard/groups-container";
 
 
 export default async function Page() {
     return (
-        <PhotoSpacesContainer />
+        <GroupsContainer />
     )
 }

@@ -18,7 +18,6 @@ export async function generateMetadata({ params }: {
 }): Promise<Metadata> {
     const photoSpaceId = params?.photoSpace
     const photoSpace: IPhotoSpace = await getPhotoSpaceBySpaceId(photoSpaceId)
-    console.log("P", photoSpace)
     return {
         title: photoSpace?.name,
         icons: "/icon.svg",

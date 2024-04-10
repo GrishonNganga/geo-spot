@@ -28,7 +28,7 @@ export const columns: ColumnDef<IPhotoSpace>[] = [
         header: "Name",
         size: 80,
         cell: ({ row }) => (
-            <Link shallow className="flex gap-x-2 items-center" href={"/space/" + row.original.spaceId}>
+            <Link shallow className="flex gap-x-2 items-center" href={"/groups/" + row.original.spaceId}>
                 <Avatar>
                     <AvatarImage src={""} alt={`${name} photo`} />
                     <div className="w-full uppercase px-2.5 py-2 bg-blue-400 text-xl rounded-md tracking-widest flex items-center justify-center text-white">
