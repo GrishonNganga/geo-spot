@@ -1,11 +1,10 @@
 "use client"
+import { useEffect, useState } from "react"
 
-import * as React from "react"
 import {
     ColumnFiltersState,
     SortingState,
     VisibilityState,
-    flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
@@ -13,40 +12,23 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 
-import { Button } from "@/components/ui/button"
-
 import { columns } from "@/app/components/dashboard/photospace-columns"
-import { getData, getLoggedInUser } from "@/lib/actions"
-import { IPhotoSpace } from "@/lib/types"
+
 import Actions from "./actions"
 import GroupsTable from "./groups-table"
 import Pagination from "./pagination"
+import { useFetchGroups } from "./hooks/useFetchGroups"
 
 export default function PhotoSpacesTable() {
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        []
-    )
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
-    const [data, setData] = React.useState<IPhotoSpace[]>([])
-    const [loading, setLoading] = React.useState(false)
+    const [sorting, setSorting] = useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+    const [rowSelection, setRowSelection] = useState({})
 
-    const pullData = async () => {
-        setLoading(true)
-        const user = await getLoggedInUser()
-        const d = await getData(user._id)
-        setLoading(false)
-        setData(d)
-    }
-
-    React.useEffect(() => {
-        pullData()
-    }, []);
+    const { groups, loading } = useFetchGroups()
 
     const table = useReactTable({
-        data,
+        data: groups,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
