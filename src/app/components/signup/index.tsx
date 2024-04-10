@@ -1,7 +1,7 @@
 'use client'
 import { signIn, signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
-import Logo from "../landing-page/logo"
+import Logo from "../header/logo"
 import { useEffect, useState } from "react"
 import { redirect, useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"

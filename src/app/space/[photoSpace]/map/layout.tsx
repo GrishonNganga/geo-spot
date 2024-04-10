@@ -1,7 +1,7 @@
 import { getSession } from "@/lib/actions"
 
-import Nav from "@/app/components/landing-page/nav"
-import UserDropDown from "@/app/components/dashboard/user-dropdown"
+import Nav from "@/app/components/header/nav"
+import UserDropDown from "@/app/components/header/user-dropdown"
 import NavMenu from "@/app/components/map/nav-menu"
 
 type Props = {

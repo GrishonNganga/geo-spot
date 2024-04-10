@@ -1,12 +1,12 @@
-import Nav from "@/app/components/landing-page/nav"
-import UserDropDown from "@/app/components/dashboard/user-dropdown"
+import UserDropDown from "@/app/components/header/user-dropdown"
+import Logo from "@/app/components/header/logo"
+import Nav from "@/app/components/header/nav"
 import { getSession } from "@/lib/actions"
-import { redirect } from "next/navigation"
-import Logo from "@/app/components/landing-page/logo"
-import { IPhotoSpace } from "@/lib/types"
 import { findPhotoSpace } from "@/lib/database/photospace"
-import { cache } from "react"
+import { IPhotoSpace } from "@/lib/types"
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
+import { cache } from "react"
 
 type Props = {
     children: JSX.Element,
@@ -18,10 +18,11 @@ export async function generateMetadata({ params }: {
 }): Promise<Metadata> {
     const photoSpaceId = params?.photoSpace
     const photoSpace: IPhotoSpace = await getPhotoSpaceBySpaceId(photoSpaceId)
+    console.log("P", photoSpace)
     return {
-        title: photoSpace.name,
+        title: photoSpace?.name,
         icons: "/icon.svg",
-        description: photoSpace.description
+        description: photoSpace?.description
     }
 }
 

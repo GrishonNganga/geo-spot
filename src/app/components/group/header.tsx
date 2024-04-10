@@ -174,7 +174,7 @@ export default function Header({ name, photo, description, access }: { name: str
                     user && photoSpace?.ownerId?._id === user._id && photoSpace!.access &&
                     <>
                         <div className="hidden lg:flex gap-x-5">
-                            <Link href={`${pathname}/events/new`}>
+                            <Link shallow href={`${pathname}/events/new`}>
                                 <Button disabled={loading} >
                                     New event
                                 </Button>

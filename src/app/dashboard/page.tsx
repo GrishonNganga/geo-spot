@@ -1,11 +1,8 @@
-import { getLoggedInUser } from "@/lib/actions";
-import PhotoSpacesTable from "../components/dashboard/photospaces-table";
+import PhotoSpacesContainer from "../components/dashboard/photospaces-container";
 
 
 export default async function Page() {
     return (
-        <div className="lg:container">
-            <PhotoSpacesTable />
-        </div>
+        <PhotoSpacesContainer />
     )
 }
