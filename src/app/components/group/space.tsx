@@ -9,15 +9,19 @@ export default async function Space({ params }: { params: { photoSpace: string }
     const photoSpaceId = params?.photoSpace
     const loggedInUser = await getLoggedInUser()
     const photoSpace: IPhotoSpace = await getPhotoSpaceBySpaceId(photoSpaceId)
+
+    //No group exists
     if (!photoSpace) {
         return redirect('/404')
     }
+
     const isOwner = (userId: String) => {
         if (photoSpace!.ownerId!._id!.toString() !== userId) {
             return false
         }
         return true
     }
+
     const hasAccess = (userId?: String) => {
         if (photoSpace.access) {
             return true
@@ -25,6 +29,7 @@ export default async function Space({ params }: { params: { photoSpace: string }
         return photoSpace?.invitations?.includes(loggedInUser.email)
     }
 
+    //Check if either user has access or is owner of group
     if (!hasAccess(loggedInUser?._id?.toString()) && !isOwner(loggedInUser?._id?.toString())) {
         return redirect('/403')
     }

@@ -63,7 +63,7 @@ export default function Events() {
                 events.length > 0 &&
                 events.map((event: IEvent) => {
                     return (
-                        <Link shallow href={`/group/${photoSpace?.spaceId}/events/${event._id}`} onClick={() => { setEvent(event) }} className="w-full flex gap-x-2 border border-transparent hover:border-primary rounded-md p-3 relative bg-accent/20 ease-in-out duration-500 cursor-pointer">
+                        <Link shallow href={`/groups/${photoSpace?.spaceId}/events/${event._id}`} onClick={() => { setEvent(event) }} className="w-full flex gap-x-2 border border-transparent hover:border-primary rounded-md p-3 relative bg-accent/20 ease-in-out duration-500 cursor-pointer">
                             <div className="flex flex-col grow h-full">
                                 <div className="flex gap-x-3">
                                     <div className="hidden lg:flex justify-end h-full">

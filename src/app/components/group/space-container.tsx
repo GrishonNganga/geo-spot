@@ -22,9 +22,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
 
     return (
         <div className="lg:container">
-            <div className="w-full h-52">
-                <MyMap classNames="lg:rounded-md overflow-hidden" uploads={photoSpace.uploads} expandMap />
-            </div>
+            <MyMap classNames="w-full h-52 lg:rounded-md overflow-hidden" uploads={photoSpace.uploads} expandMap />
             <div className="container lg:px-0 flex flex-col gap-y-5">
                 <Header name={photoSpace.name} photo="" description={photoSpace.description} access={photoSpace.access} />
                 <div className="flex flex-col lg:flex-row gap-x-8 gap-y-5">
@@ -39,6 +37,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                     }
                 </div>
                 {
+                    //Private groups views Members
                     !photoSpace.access &&
                     <div className="flex flex-col lg:flex-row gap-x-8">
                         <div className="lg:w-1/2">
@@ -48,6 +47,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                             <Trees uploads={photoSpace.uploads} />
                         </div>
                     </div>
+                    //Public groups views Events
                     ||
                     <div className="flex flex-col lg:flex-row gap-x-5">
                         <div className="lg:w-1/2">
