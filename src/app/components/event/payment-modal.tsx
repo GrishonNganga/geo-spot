@@ -141,11 +141,11 @@ export default function PaymentModal({ open, setOpen, event, trees, amount }: { 
                             <>
                                 <div className="flex flex-col gap-y-3">
                                     <Label htmlFor="name">Name</Label>
-                                    <Input type="name" name="name" onChange={(e) => { setUserDetails((prevState: IUser) => ({ ...prevState, [e.target.name]: e.target.value })) }} autoComplete="false" placeholder="Your name" />
+                                    <Input type="name" name="name" onChange={(e) => { setUserDetails((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value })) }} autoComplete="false" placeholder="Your name" />
                                 </div>
                                 <div className="flex flex-col gap-y-3">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input type="name" name="email" onChange={(e) => { setUserDetails((prevState: IUser) => ({ ...prevState, [e.target.name]: e.target.value })) }} autoComplete="false" placeholder="Your email" />
+                                    <Input type="name" name="email" onChange={(e) => { setUserDetails((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value })) }} autoComplete="false" placeholder="Your email" />
                                 </div>
                             </>
                             ||
