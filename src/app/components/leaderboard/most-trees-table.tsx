@@ -7,9 +7,9 @@ export default function MostTreesTable() {
         <div className="w-full lg:w-1/2 flex flex-col mt-10">
             <MostTreesTop />
             {
-                Array(5).fill(0).map(l => {
+                Array(5).fill(0).map((l, idx) => {
                     return (
-                        <Card />
+                        <Card key={idx} />
                     )
                 })
             }

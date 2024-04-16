@@ -61,9 +61,9 @@ export default function Events() {
             </div>
             {
                 events.length > 0 &&
-                events.map((event: IEvent) => {
+                events.map((event: IEvent, idx: number) => {
                     return (
-                        <Link shallow href={`/groups/${photoSpace?.spaceId}/events/${event._id}`} onClick={() => { setEvent(event) }} className="w-full flex gap-x-2 border border-transparent hover:border-primary rounded-md p-3 relative bg-accent/20 ease-in-out duration-500 cursor-pointer">
+                        <Link key={idx} shallow href={`/groups/${photoSpace?.spaceId}/events/${event._id}`} onClick={() => { setEvent(event) }} className="w-full flex gap-x-2 border border-transparent hover:border-primary rounded-md p-3 relative bg-accent/20 ease-in-out duration-500 cursor-pointer">
                             <div className="flex flex-col grow h-full">
                                 <div className="flex gap-x-3">
                                     <div className="hidden lg:flex justify-end h-full">
@@ -108,7 +108,7 @@ export default function Events() {
                                                 {
                                                     [1, 2, 3, 4, 5].map((l, idx) => {
                                                         return (
-                                                            <TooltipProvider>
+                                                            <TooltipProvider key={idx}>
                                                                 <Tooltip>
                                                                     <TooltipTrigger asChild>
                                                                         <Avatar className={`w-6 h-6 z-30 shadow-md border ${idx !== 0 && "-ml-2.5"}`}>
@@ -179,9 +179,9 @@ const Skeleton = () => {
                 </div>
             </div>
             {
-                new Array(5).fill(0).map(l => {
+                new Array(5).fill(0).map((l, idx) => {
                     return (
-                        <div className="w-full flex gap-x-2 border border-transparent rounded-md p-3 relative bg-accent/20 ease-in-out duration-500 cursor-pointer">
+                        <div key={idx} className="w-full flex gap-x-2 border border-transparent rounded-md p-3 relative bg-accent/20 ease-in-out duration-500 cursor-pointer">
                             <div className="flex flex-col grow h-full">
                                 <div className="flex gap-x-3">
                                     <div className="hidden lg:flex justify-end h-full">

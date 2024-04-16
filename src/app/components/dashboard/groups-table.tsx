@@ -59,9 +59,9 @@ export default function GroupsTable({ headerGroups, rows, columns, loading }: { 
                             </TableRow>
                         ))
                     ) : (loading ? (
-                        Array(10).fill(0).map(el => {
+                        Array(10).fill(0).map((el, idx) => {
                             return (
-                                <TableRow>
+                                <TableRow key={idx}>
                                     <TableCell
                                         colSpan={columns.length}
                                         className="flex gap-x-2 items-center"
