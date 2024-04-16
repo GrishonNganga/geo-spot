@@ -76,9 +76,9 @@ export default function PaymentModal({ open, setOpen, event, trees, amount }: { 
                         //     consumer_mac: "92a3-912ba-1192a"
                         // },
                         customer: {
-                            email: customer.email,
+                            email: user!.email,
                             phonenumber: "0729400426",
-                            name: customer.name
+                            name: user!.name
                         },
                         customizations: {
                             title: 'Arboretum plant trees',
@@ -87,15 +87,14 @@ export default function PaymentModal({ open, setOpen, event, trees, amount }: { 
                         },
                     })
                 })
+            setPaymentLoading(false)
+            console.log("RES", response)
+            const data = await response.json()
+            console.log("D", data)
         } catch (e) {
             setPaymentLoading(false)
-            toast.error(e.message)
             return
         }
-        setPaymentLoading(false)
-        console.log("RES", response)
-        const data = await response.json()
-        console.log("D", data)
     }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -114,7 +113,7 @@ export default function PaymentModal({ open, setOpen, event, trees, amount }: { 
                                     {event.name}
                                 </CardTitle>
                                 <div className="text-sm text-muted-foreground">
-                                    {format(event?.date, "LLLL	d, yyyy")} &nbsp; {event?.start} - {event?.end}
+                                    {format(event!.date!.toDateString(), "LLLL	d, yyyy")} &nbsp; {event?.start?.toLocaleDateString()} - {event?.end?.toLocaleDateString()}
                                 </div>
                             </div>
                         </div>
