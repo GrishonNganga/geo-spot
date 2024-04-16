@@ -30,7 +30,7 @@ export default function Page({ params }: { params: { event: string } }) {
         if (!event) {
             pullEvent()
         }
-    }, [event])
+    }, [event, params.event, setEvent])
     if (loading) {
         return (
             <>

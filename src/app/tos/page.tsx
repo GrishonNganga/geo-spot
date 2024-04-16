@@ -12,7 +12,7 @@ export default function Page() {
                     </div>
                     <div className="space-y-4">
                         <p className="text-gray-500 xl:text-xl/relaxed dark:text-gray-400">
-                            Welcome to Arboretum ("the App"). These Terms of Service ("Terms") govern your use of the App. By accessing or using the App, you agree to comply with these Terms. If you do not agree with these Terms, you may not use the App.
+                            Welcome to Arboretum (&quot;the App&quot;). These Terms of Service (&quot;Terms&quot;) govern your use of the App. By accessing or using the App, you agree to comply with these Terms. If you do not agree with these Terms, you may not use the App.
                         </p>
                     </div>
                     <div className="space-y-4">
@@ -49,7 +49,7 @@ export default function Page() {
                     <div className="space-y-4">
                         <h2 className="text-2xl font-bold">5. Disclaimer of Warranties</h2>
                         <p className="text-gray-500 xl:text-xl/relaxed dark:text-gray-400">
-                            The App is provided on an "as is" and "as available" basis, without any warranties of any kind, express or implied. Arboretum does not warrant that the App will be uninterrupted or error-free, or that any defects will be corrected.
+                            The App is provided on an &quot;as is&quot; and &quot;as available&quot; basis, without any warranties of any kind, express or implied. Arboretum does not warrant that the App will be uninterrupted or error-free, or that any defects will be corrected.
                         </p>
                     </div>
                     <div className="space-y-4">
@@ -78,7 +78,7 @@ export default function Page() {
                         <p className="text-gray-500 xl:text-xl/relaxed dark:text-gray-400">
                             If you have any questions or concerns about these Terms, please contact us at grish@arboretum.cloud.
 
-                            Thank you for using Arboretum. Let's work together to make a positive impact on the environment.                       
+                            Thank you for using Arboretum. Let&quot;s work together to make a positive impact on the environment.                       
                              </p>
                     </div>
                     <div className="grid gap-4">

@@ -37,7 +37,7 @@ export default function SpaceContainer({ photoSpace }: { photoSpace: IPhotoSpace
                     }
                 </div>
                 {
-                    //Private groups views Members
+                    //Private groups views Members and trees
                     !photoSpace.access &&
                     <div className="flex flex-col lg:flex-row gap-x-8">
                         <div className="lg:w-1/2">

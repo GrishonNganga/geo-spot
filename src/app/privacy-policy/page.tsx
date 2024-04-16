@@ -12,7 +12,7 @@ export default function Page() {
                     </div>
                     <div className="space-y-4">
                         <p className="text-gray-500 xl:text-xl/relaxed dark:text-gray-400">
-                            Thank you for using Arboretum ("the App"). Our Privacy Policy explains how we collect, use, and disclose information about you. The terms of this
+                            Thank you for using Arboretum (&quot;the App&quot;). Our Privacy Policy explains how we collect, use, and disclose information about you. The terms of this
                             Privacy Policy apply to all users of our website, app, or other services. By accessing or using our
                             Service, you agree to the terms of this Privacy Policy.
                         </p>
@@ -72,7 +72,7 @@ export default function Page() {
                     <div className="space-y-4">
                         <h2 className="text-2xl font-bold">Google OAuth2</h2>
                         <p className="text-gray-500 xl:text-xl/relaxed dark:text-gray-400">
-                            Arboretum uses Google OAuth2 for user authentication. By using our App, you agree to Google's Terms of Service and Privacy Policy.
+                            Arboretum uses Google OAuth2 for user authentication. By using our App, you agree to Google&apos;s Terms of Service and Privacy Policy.
                         </p>
                     </div>
                     <div className="space-y-4">
@@ -94,7 +94,7 @@ export default function Page() {
 
                             By continuing to use the App after any changes to this Privacy Policy, you acknowledge and agree to the updated terms.
 
-                            Thank you for trusting Arboretum with your information. Together, let's make a difference in the world by planting trees.
+                            Thank you for trusting Arboretum with your information. Together, let&apos;s make a difference in the world by planting trees.
                         </p>
                     </div>
                     <div className="grid gap-4">
