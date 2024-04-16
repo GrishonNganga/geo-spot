@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { CardTitle } from "@/components/ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { getGroupEventsAction } from "@/lib/actions"
-import { IEvent } from "@/lib/types"
+import { IEvent, IUser } from "@/lib/types"
 import { eventStore, photoSpaceStore } from "@/store"
 import { MapPin } from "lucide-react"
 import Image from "next/image"
@@ -69,13 +69,13 @@ export default function Events() {
                                     <div className="hidden lg:flex justify-end h-full">
                                         <div className="uppercase bg-green-50 dark:bg-background dark:border px-2 text-xs h-full">
                                             <div>
-                                                {new Date(event.date)?.toLocaleString('en-us', { weekday: 'short' })}
+                                                {new Date(event.date!)?.toLocaleString('en-us', { weekday: 'short' })}
                                             </div>
                                             <div className="text-xl font-semibold text-foreground">
-                                                {new Date(event.date).getDate()}
+                                                {new Date(event.date!).getDate()}
                                             </div>
                                             <div>
-                                                {new Date(event.date)?.toLocaleString('en-us', { month: 'short' })}
+                                                {new Date(event.date!)?.toLocaleString('en-us', { month: 'short' })}
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +90,7 @@ export default function Events() {
                                                     <AvatarFallback>GN</AvatarFallback>
                                                 </Avatar>
                                                 <div>
-                                                    By {event.owner?.name}
+                                                    By {(event.owner as IUser)?.name}
                                                 </div>
                                             </div>
                                             <div className="flex gap-x-2 items-center text-xs">
@@ -102,7 +102,7 @@ export default function Events() {
                                         </div>
                                         <div className="flex gap-x-4">
                                             <div className="text-green-500">
-                                                {event.price ? <span>KES {event.price}</span> : <span>Free</span>}
+                                                {event.price ? <span>KES {event.price as number}</span> : <span>Free</span>}
                                             </div>
                                             <div className="flex items-center">
                                                 {
@@ -148,13 +148,13 @@ export default function Events() {
                                 <div className="flex lg:hidden justify-end mt-3">
                                     <div className="uppercase bg-green-50 dark:bg-background dark:border px-2 text-xs">
                                         <div>
-                                            {new Date(event.date)?.toLocaleString('en-us', { weekday: 'short' })}
+                                            {new Date(event.date!)?.toLocaleString('en-us', { weekday: 'short' })}
                                         </div>
                                         <div className="text-xl font-semibold text-foreground">
-                                            {new Date(event.date).getDay()}
+                                            {new Date(event.date!).getDay()}
                                         </div>
                                         <div>
-                                            {new Date(event.date)?.toLocaleString('en-us', { month: 'short' })}
+                                            {new Date(event.date!)?.toLocaleString('en-us', { month: 'short' })}
                                         </div>
                                     </div>
                                 </div>

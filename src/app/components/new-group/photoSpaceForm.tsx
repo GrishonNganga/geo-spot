@@ -16,7 +16,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { IPhotoSpace } from "@/lib/types"
 
-export default function PhotoSpaceForm({ photoSpaceDetails, setPhotoSpaceDetails, handleSubmit, loading }: { photoSpaceDetails: IPhotoSpace, setPhotoSpaceDetails: (ps: IPhotoSpace) => void, handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void, loading: boolean }) {
+export default function PhotoSpaceForm({ photoSpaceDetails, setPhotoSpaceDetails, handleSubmit, loading }: { photoSpaceDetails: IPhotoSpace, setPhotoSpaceDetails: (ps: any) => void, handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void, loading: boolean }) {
 
     return (
         <Card className="w-full max-w-3xl mx-auto">
@@ -34,7 +34,7 @@ export default function PhotoSpaceForm({ photoSpaceDetails, setPhotoSpaceDetails
                             name="name"
                             placeholder="What is the name of your tree planting group"
                             autoComplete="off"
-                            onChange={(e) => { setPhotoSpaceDetails((prevState) => ({ ...prevState, [e.target.name]: e.target.value })) }}
+                            onChange={(e) => { setPhotoSpaceDetails((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value })) }}
                         />
 
                     </div>
@@ -45,7 +45,7 @@ export default function PhotoSpaceForm({ photoSpaceDetails, setPhotoSpaceDetails
                             name="description"
                             placeholder="Tell us a bit about your group"
                             autoComplete="off"
-                            onChange={(e) => { setPhotoSpaceDetails(prevState => ({ ...prevState, [e.target.name]: e.target.value })) }}
+                            onChange={(e) => { setPhotoSpaceDetails((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value })) }}
                         />
 
                     </div>
@@ -59,7 +59,7 @@ export default function PhotoSpaceForm({ photoSpaceDetails, setPhotoSpaceDetails
                             name="target"
                             placeholder="How many trees to be planted"
                             autoComplete="off"
-                            onChange={(e) => { setPhotoSpaceDetails(prevState => ({ ...prevState, [e.target.name]: e.target.value })) }}
+                            onChange={(e) => { setPhotoSpaceDetails((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value })) }}
                         />
                     </div>
                     <div className="flex flex-col gap-y-2">
@@ -81,7 +81,7 @@ export default function PhotoSpaceForm({ photoSpaceDetails, setPhotoSpaceDetails
                                 <Calendar
                                     mode="single"
                                     selected={photoSpaceDetails.deadline}
-                                    onSelect={(e) => { setPhotoSpaceDetails(prevState => ({ ...prevState, "deadline": e })) }}
+                                    onSelect={(e) => { setPhotoSpaceDetails((prevState: any) => ({ ...prevState, "deadline": e })) }}
                                     initialFocus
                                 />
                             </PopoverContent>
@@ -93,7 +93,7 @@ export default function PhotoSpaceForm({ photoSpaceDetails, setPhotoSpaceDetails
                         <Switch
                             id="access"
                             checked={photoSpaceDetails.access}
-                            onCheckedChange={(e) => { setPhotoSpaceDetails(prevState => ({ ...prevState, access: !prevState.access })) }}
+                            onCheckedChange={(e) => { setPhotoSpaceDetails((prevState: any) => ({ ...prevState, access: !prevState.access })) }}
                         />
                     </div>
                 </CardContent>

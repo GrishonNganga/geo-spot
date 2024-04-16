@@ -44,7 +44,7 @@ export default function MembersTable({ invitations }: { invitations?: String[] }
             setLoading(true)
             const user = await getLoggedInUser()
             if (invitations && invitations.length > 0) {
-                const inv = await getPopulatedInvitations(invitations)
+                const inv: IUser[] = await getPopulatedInvitations(invitations)
                 setData(inv)
             }
             setLoading(false)

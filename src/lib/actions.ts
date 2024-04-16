@@ -70,10 +70,7 @@ export async function createPhotoSpaceAction(data: IPhotoSpace) {
 }
 
 export async function getPopulatedInvitations(emails: String[]) {
-    const connect = await dbConnect()
-    if (!connect) {
-        return { status: false, message: "Something wrong happened!" }
-    }
+    await dbConnect()
     const emailsExist = await findUsersByEmail(emails)
     const emailsNotExist: { email: String }[] = emails.filter(email => !emailsExist.find(e => e.email === email)).map(e => ({ email: e }))
     return [...emailsExist, ...emailsNotExist]

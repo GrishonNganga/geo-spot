@@ -113,7 +113,7 @@ export default function PaymentModal({ open, setOpen, event, trees, amount }: { 
                                     {event.name}
                                 </CardTitle>
                                 <div className="text-sm text-muted-foreground">
-                                    {format(event!.date!.toDateString(), "LLLL	d, yyyy")} &nbsp; {event?.start?.toLocaleDateString()} - {event?.end?.toLocaleDateString()}
+                                    {format(event!.date!, "LLLL	d, yyyy")} &nbsp; {event?.start} - {event?.end}
                                 </div>
                             </div>
                         </div>

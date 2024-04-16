@@ -66,13 +66,13 @@ export type IEvent = {
     photo?: String,
     date?: Date,
     location?: ILocation,
-    start?: Date,
-    end?: Date,
+    start?: string,
+    end?: string,
     attendees?: IUser,
     price?: Number,
     target?: Number,
     capacity?: Number,
-    owner?: ObjectId,
-    group?: ObjectId
+    owner?: ObjectId | IUser,
+    group?: ObjectId | IPhotoSpace
 }
 export type Point = google.maps.LatLngLiteral & { location: string, key: string, photos: IPhoto[] };

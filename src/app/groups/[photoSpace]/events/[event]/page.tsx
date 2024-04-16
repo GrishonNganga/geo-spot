@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { getEventAction } from "@/lib/actions"
+import { IPhotoSpace, IUser } from "@/lib/types"
 import { eventStore } from "@/store"
 import { format } from "date-fns"
 import { ArrowUpRight, MapPin } from "lucide-react"
@@ -48,16 +49,16 @@ export default function Page({ params }: { params: { event: string } }) {
                     </div>
                     <div className="w-full hidden lg:flex items-center gap-x-2 mt-3">
                         <div className="h-full uppercase px-2 py-1.5 bg-blue-400 text-xl rounded-md tracking-widest text-white">
-                            {event?.group?.name?.split(" ")[0][0]}{event?.group?.name.split(" ")[0][1]}
+                            {(event?.group as IPhotoSpace)?.name?.split(" ")[0][0]}{(event?.group as IPhotoSpace)?.name.split(" ")[0][1]}
                         </div>
                         <div className="h-full">
                             <div className="text-xs text-muted-foreground">Presented by</div>
-                            <div className="font-semibold">{event.group.name}</div>
+                            <div className="font-semibold">{(event.group as IPhotoSpace).name}</div>
                         </div>
                     </div>
                     <div className="hidden lg:block">
                         <div className="text-xs mt-3">
-                            {event?.group?.description}
+                            {(event?.group as IPhotoSpace)?.description}
                         </div>
                     </div>
                     <div className="hidden lg:block">
@@ -66,11 +67,11 @@ export default function Page({ params }: { params: { event: string } }) {
                         </div>
                         <div className="flex gap-x-2 items-center mt-3">
                             <Avatar className="w-6 h-6">
-                                <AvatarImage src={event?.owner?.image} alt={`${event?.owner?.name} photo`} />
-                                <AvatarFallback>{event?.owner?.name?.split(" ")[0][0]}</AvatarFallback>
+                                <AvatarImage src={(event?.owner as IUser).image as string} alt={`${(event?.owner as IUser)?.name} photo`} />
+                                <AvatarFallback>{(event?.owner as IUser)?.name?.split(" ")[0][0]}</AvatarFallback>
                             </Avatar>
                             <div className="text-sm">
-                                {event.owner.name}
+                                {(event.owner as IUser).name}
                             </div>
                         </div>
                     </div>
@@ -89,26 +90,26 @@ export default function Page({ params }: { params: { event: string } }) {
                         </div>
                         <div className="flex gap-x-2 items-center mt-3">
                             <Avatar className="w-6 h-6">
-                                <AvatarImage src={event?.owner?.image} alt={`${event?.owner?.name} photo`} />
-                                <AvatarFallback>{event?.owner?.name?.split(" ")[0][0]}</AvatarFallback>
+                                <AvatarImage src={(event?.owner as IUser)?.image as string} alt={`${(event?.owner as IUser)?.name} photo`} />
+                                <AvatarFallback>{(event?.owner as IUser)?.name?.split(" ")[0][0]}</AvatarFallback>
                             </Avatar>
                             <div className="text-sm">
-                                {event.owner.name}
+                                {(event.owner as IUser).name}
                             </div>
                         </div>
                     </div>
                     <div className="flex gap-x-5 items-center">
                         <div className="flex flex-col border rounded">
                             <div className="px-2.5 bg-accent/40 uppercase py-0.5 rounded-t text-[0.5rem]">
-                                {new Date(event?.date)?.toLocaleString('en-us', { month: 'short' })}
+                                {new Date(event?.date as Date)?.toLocaleString('en-us', { month: 'short' })}
                             </div>
                             <div className=" text-center  text-muted-foreground">
-                                {new Date(event?.date).getDate()}
+                                {new Date(event?.date as Date).getDate()}
                             </div>
                         </div>
                         <div className="flex flex-col">
                             <div>
-                                {format(event?.date, "LLLL	d, yyyy")}
+                                {format((event?.date as Date), "LLLL	d, yyyy")}
                             </div>
                             {
                                 event.start && event.end &&
@@ -201,16 +202,16 @@ export default function Page({ params }: { params: { event: string } }) {
                     </div>
                     <div className="w-full flex lg:hidden items-center gap-x-2 mt-3">
                         <div className="h-full uppercase px-2 py-1.5 bg-blue-400 text-xl rounded-md tracking-widest text-white">
-                            {event?.group?.name?.split(" ")[0][0]}{event?.group?.name.split(" ")[0][1]}
+                            {(event?.group as IPhotoSpace)?.name?.split(" ")[0][0]}{(event?.group as IPhotoSpace)?.name.split(" ")[0][1]}
                         </div>
                         <div className="h-full">
                             <div className="text-xs text-muted-foreground">Presented by</div>
-                            <div className="font-semibold">{event.group.name}</div>
+                            <div className="font-semibold">{(event.group as IPhotoSpace).name}</div>
                         </div>
                     </div>
                     <div className="lg:hidden">
                         <div className="text-xs">
-                            {event?.group?.description}
+                            {(event?.group as IPhotoSpace)?.description}
                         </div>
                     </div>
                 </div>
